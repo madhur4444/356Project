@@ -74,7 +74,10 @@ def sanitizeMovies():
             if count == 1:
                 csvwriter.writerow(newLine)
                 continue
-            
+            datePublished = line[4]
+            datePublished = modifyDob(datePublished)
+            newLine[4] = datePublished
             csvwriter.writerow(newLine)
 
+# sanitizeNames()
 sanitizeMovies()
