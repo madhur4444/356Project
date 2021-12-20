@@ -2,7 +2,7 @@ import server
 
 def sendRequest(request):
 	print("Sending request!" + request)
-	server.parseRequest(request)
+	return server.parseRequest(request)
 
 def printChoices(choices):
 	for i in range(len(choices)):
@@ -16,7 +16,8 @@ def main():
 	if command == "am":
 		command += " "
 		command += input("Enter the movie name: ")
-		sendRequest(command)
+		response = sendRequest(command)
+		print(response)
 
 if __name__ == "__main__":
 	main()
