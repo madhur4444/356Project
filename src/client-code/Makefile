@@ -4,6 +4,10 @@ all:
 client:
 	python3 client.py
 
+test:
+	make testClient
+	make testServer
+
 testClient:
 	python3 testClient.py
 

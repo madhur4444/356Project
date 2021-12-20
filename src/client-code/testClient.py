@@ -7,9 +7,13 @@ def main():
         "am\nJj\n"
     ]
 
-    for tc in testcases:
-        sys.stdin = StringIO(tc)
-        client.main()
+    expected = [
+        "nice"
+    ]
+
+    for i in range(len(testcases)):
+        sys.stdin = StringIO(testcases[i])
+        assert client.main() == expected[i]
 
 if __name__ == "__main__":
 	main()
