@@ -62,6 +62,7 @@ def sanitizeNames():
 def sanitizeMovies():
     csvtobechanged = 'movies.csv'
     newcsv = open('new_' + csvtobechanged, 'w')
+    genreMap = {}
 
     with open(csvtobechanged) as csvfile:
         csvreader = csv.reader(csvfile)
@@ -71,13 +72,53 @@ def sanitizeMovies():
         for line in lines:
             count += 1
             newLine = line
+            doNotInclude = []
             if count == 1:
                 csvwriter.writerow(newLine)
                 continue
+            genreMap[line[0]] = line[5]
             datePublished = line[4]
             datePublished = modifyDob(datePublished)
             newLine[4] = datePublished
+            for i in doNotInclude:
+                newLine.pop(i)
             csvwriter.writerow(newLine)
 
+    return genreMap
+
+def makeGenres(genreMap):
+    fgenre = open('genres.csv', 'w')
+    genrewriter = csv.writer(fgenre)
+    genrewriter.writerow(['imdb_title_id', 'genre'])
+    for key in genreMap:
+        line = []
+        line.append(key)
+        line.append(genreMap[key])
+        genrewriter.writerow(line)
+    fgenre.close()
+
+def sanitizeGenres():
+    fgenre = open('genres.csv', 'r')
+    newfgen = open('new_genres.csv', 'w')
+    genrereader = csv.reader(fgenre)
+    genrewriter = csv.writer(newfgen)
+    lines = list(genrereader)
+    for line in lines:
+        newLines = []
+        genre = line[1]
+        if "," in genre:
+            genreList = genre.split(',')
+            for g in genreList:
+                g = g.strip()
+                newLines.append([line[0], g])
+        else:
+            newLines.append(line)
+        genrewriter.writerows(newLines)
+
+    fgenre.close()
+
 # sanitizeNames()
-sanitizeMovies()
+# genreMap = sanitizeMovies()
+# makeGenres(genreMap)
+# sanitizeGenres()
+# sanitizeTitlePrincipals()
