@@ -6,8 +6,10 @@ def parseRequest(request):
     print("Request parsed" + str(parts))
     response = "nice"
     try:
-        cnx = mysql.connector.connect(host='marmoset04.shoshin.uwaterloo.ca',
-                                    database='NHL_356')
+        cnx = mysql.connector.connect(host="marmoset04.shoshin.uwaterloo.ca",
+                                    user="kjbhardw",
+                                    password="loL_12345",
+                                    database="NHL_356")
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("Something is wrong with your user name or password")
