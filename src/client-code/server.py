@@ -64,10 +64,17 @@ def parseRequest(request):
     if response in Err:
         return response
 
-    query = ("SELECT * FROM Game LIMIT 5")
-    headings = ["gameID", "season", "gameType", "dateTimeGMT", "awayTeamID",
-                "homeTeamID", "awayGoals", "homeGoals", "outcome", "homeRinkSideStart",
-                "venue", "venueTimeZoneID", "venueTimeZoneOffset", "venueTimeZoneTZ"]
-    response = getQueryResponse(cnx, query, headings, None)
+    # query = ("SELECT * FROM Game LIMIT 5")
+    # headings = ["gameID", "season", "gameType", "dateTimeGMT", "awayTeamID",
+    #             "homeTeamID", "awayGoals", "homeGoals", "outcome", "homeRinkSideStart",
+    #             "venue", "venueTimeZoneID", "venueTimeZoneOffset", "venueTimeZoneTZ"]
+    # response = getQueryResponse(cnx, query, headings, None)
+
+    if parts[0] == "am":
+        # Add movie with details in the other parts
+        print("Hello")
+    elif parts[1] == "r":
+        # Print movie ratings with parts[1] as the name of the movie
+        print("Hello")
 
     return response
