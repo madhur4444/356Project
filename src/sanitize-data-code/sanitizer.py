@@ -8,10 +8,9 @@ def modifyPlaceOfBirth(countryName):
         newName = newName[1]
         if "]" not in newName:
             print(newName)
-        newName = newName.split("]")
-        newName = newName[0]
         countryName = newName
-    countryName = "\'" + countryName + "\'"
+    if "]" in countryName:
+        countryName = countryName.replace("]", "")
     return countryName
 
 def modifyDob(dob):
@@ -80,6 +79,14 @@ def sanitizeMovies():
             datePublished = line[4]
             datePublished = modifyDob(datePublished)
             newLine[4] = datePublished
+            lang = line[8]
+            if ", None" in lang:
+                lang = lang.replace(", None", "")
+            elif "None, " in lang:
+                lang = lang.replace("None, ", "")
+            elif "None" in lang:
+                lang = lang.replace("None", "")
+            line[8] = lang
             for i in doNotInclude:
                 newLine.pop(i)
             csvwriter.writerow(newLine)
@@ -117,8 +124,30 @@ def sanitizeGenres():
 
     fgenre.close()
 
+def sanitizeMovieRoles():
+    csvtobechanged = 'movieRoles.csv'
+    newcsv = open('new_' + csvtobechanged, 'w')
+
+    with open(csvtobechanged) as csvfile:
+        csvreader = csv.reader(csvfile)
+        csvwriter = csv.writer(newcsv)
+        lines = list(csvreader)
+        for line in lines:
+            newLine = line
+            character = line[len(line) - 1]
+            if "[" in character:
+                character = character.split("[")
+                character = character[1]
+                character = character.split("]")
+                character = character[0]
+            if '"' in character:
+                character = character.replace('"', '')
+            newLine[len(line) - 1] = character
+            csvwriter.writerow(newLine)
+
 # sanitizeNames()
 # genreMap = sanitizeMovies()
 # makeGenres(genreMap)
 # sanitizeGenres()
 # sanitizeTitlePrincipals()
+# sanitizeMovieRoles()
