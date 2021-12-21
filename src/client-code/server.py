@@ -1,10 +1,16 @@
 import mysql.connector
 from mysql.connector import errorcode
+from enum import Enum
+
+Err = {
+    "accdenied": "ERR: Access denied to the database, please try again!",
+    "baddb": "ERR: Database does not exist, please try later!"
+}
 
 def parseRequest(request):
     parts = request.split()
     print("Request parsed" + str(parts))
-    response = "nice"
+    response = ""
     try:
         cnx = mysql.connector.connect(host="marmoset04.shoshin.uwaterloo.ca",
                                     user="kjbhardw",
@@ -12,9 +18,9 @@ def parseRequest(request):
                                     database="NHL_356")
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password")
+            response = Err["accdenied"]
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("Database does not exist")
+            response = Err["baddb"]
         else:
             print(err)
     else:
