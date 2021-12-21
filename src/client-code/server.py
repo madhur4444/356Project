@@ -1,6 +1,8 @@
 import mysql.connector
 from mysql.connector import errorcode
 import datetime
+import random
+import re
 
 from mysql.connector.connection import MySQLConnection
 
@@ -56,6 +58,28 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
     
     return response
 
+def addMovieToMovies(parts, cnx: MySQLConnection):
+    query = "INSERT INTO Movies VALUES ("
+    for i in range(21):
+        query += "%s"
+    query += ");"
+    queryParams = []
+    queryParams.append("tt" + str(random.randint(9915000, 9999999))) #id
+    queryParams.append(str(parts[1])) # title
+    queryParams.append(str(parts[1])) # original title
+    # queryParams.append(parts[2]) # year
+    m = re.match('[0-9][0-9][0-9][0-9]', parts[2])
+    if m:
+        m = m.group(0)
+        queryParams.append(m)
+    else:
+        queryParams.append("")
+    queryParams.append(parts[2]) # date published
+    for i in range(3, len(parts)):
+        queryParams.append(str(parts[i]))
+    response = getQueryResponse(cnx, query, [], queryParams)
+    print(response)
+
 def parseRequest(request):
     parts = request.split("$$")
 
@@ -72,7 +96,7 @@ def parseRequest(request):
 
     if parts[0] == "am":
         # Add movie with details in the other parts
-        print("Hello")
+        addMovieToMovies(parts, cnx)
     elif parts[1] == "r":
         # Print movie ratings with parts[1] as the name of the movie
         print("Hello")
