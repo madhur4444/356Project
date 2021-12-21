@@ -13,13 +13,23 @@ Err = {
 
 def insert(table, fields):
     insertQ = "INSERT INTO " + str(table)
-    insertQ += " (imdb_title_id, title, original_title, year_of_release, date_published, duration, country, language, director, writer, production_company, actors, description, budget, usa_gross_income, worlwide_gross_income, reviews_from_users, reviews_from_critics)"
     insertQ += " VALUES (%s"
     for i in range(len(fields) - 1):
         insertQ += ", %s"
     insertQ += ");"
     
     return insertQ
+
+def select(table, fields, condition):
+    selectQ = "SELECT " + str(fields[0])
+    for i in range(1, len(fields)):
+        selectQ += ", " + str(fields[i])
+    selectQ += " FROM ( " + str(table) + " )"
+    if condition is not None:
+        selectQ += " " + str(condition)
+    selectQ += ";"
+
+    return selectQ
 
 def buildResponseObj(headings, rawResponse):
     response = {}
@@ -99,12 +109,6 @@ def parseRequest(request):
 
     if response in Err:
         return response
-
-    # query = ("SELECT * FROM Game LIMIT 5")
-    # headings = ["gameID", "season", "gameType", "dateTimeGMT", "awayTeamID",
-    #             "homeTeamID", "awayGoals", "homeGoals", "outcome", "homeRinkSideStart",
-    #             "venue", "venueTimeZoneID", "venueTimeZoneOffset", "venueTimeZoneTZ"]
-    # response = getQueryResponse(cnx, query, headings, None)
 
     if parts[0] == "am":
         # Add movie with details in the other parts
