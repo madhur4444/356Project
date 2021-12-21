@@ -31,6 +31,24 @@ def select(table, fields, condition):
 
     return selectQ
 
+def delete(table, condition):
+    deleteQ = "DELETE FROM ( " + str(table) + " )"
+    deleteQ += " WHERE " + str(condition) + ";"
+
+    return deleteQ
+
+def update(table, fields, newVals, condition):
+    updateQ = "UPDATE ( " + str(table) + " ) SET "
+    updateQ += str(fields[0]) + " = '"  + str(newVals[0]) + "'"
+    for i in range(1, len(fields)):
+        field = fields[i]
+        newVal = newVal[i]
+        updateQ += ", "
+        updateQ += str(field) + " = '"  + str(newVal) + "'"
+    updateQ += " WHERE " + str(condition) + ";"
+
+    return updateQ
+
 def buildResponseObj(headings, rawResponse):
     response = {}
     for h in headings:
@@ -78,6 +96,12 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
     
     return response
 
+def getMovieId(movieName, cnx: MySQLConnection):
+    query = select("Movies", "imdb_title_id", "title = '" + str(movieName) + "'")
+    response = getQueryResponse(cnx, query, ["imdb_title_id"], None)
+    if "imdb_title_id" in response:
+        return response["imdb_title_id"]
+
 def addMovieToMovies(parts, cnx: MySQLConnection):
     queryParams = []
     queryParams.append("tt" + str(random.randint(9915000, 9999999))) #id
@@ -97,10 +121,45 @@ def addMovieToMovies(parts, cnx: MySQLConnection):
     print(len(queryParams))
     print(query)
     response = getQueryResponse(cnx, query, [], queryParams)
-    if 'nodata' in response:
-        return True
-    else:
-        return False
+    return 'nodata' in response
+
+def deleteMovieFromAllTables(parts, cnx: MySQLConnection):
+
+    # First get the movie id
+    movieId = getMovieId(parts[1], cnx)
+
+    # Now, first delete from Movies using movieId
+    query = delete("Movies", "imdb_title_id = '" + str(movieId) + "'")
+    response = getQueryResponse(cnx, query, [], None)
+    
+    # Now, delete from all tables that have movieId: Ratings, MovieRoles, Genres
+    query = delete("Ratings", "imdb_title_id = '" + str(movieId) + "'")
+    response = getQueryResponse(cnx, query, [], None)
+
+    query = delete("MovieRoles", "imdb_title_id = '" + str(movieId) + "'")
+    response = getQueryResponse(cnx, query, [], None)
+
+    query = delete("Genres", "imdb_title_id = '" + str(movieId) + "'")
+    response = getQueryResponse(cnx, query, [], None)
+    return 'nodata' in response
+
+def updateMovieData(parts, cnx: MySQLConnection):
+
+    # First, get movieId
+    movieId = getMovieId(parts[1], cnx)
+
+    # Now, for each other part of the given request, update that field to the newValue
+    fields, newValues = [], []
+    for i in range(2, len(parts)):
+        updationSubReq = parts[i].split("?=")
+        field, newValue = updationSubReq[0], updationSubReq[1]
+        fields.append(field)
+        newValues.append(newValue)
+    
+    query = update("Movies", fields, newValues, "imdb_title_id = '" + str(movieId) + "'")
+    response = getQueryResponse(cnx, query, [], None)
+    return 'nodata' in response
+
 
 def parseRequest(request):
     parts = request.split("$$")
@@ -113,8 +172,10 @@ def parseRequest(request):
     if parts[0] == "am":
         # Add movie with details in the other parts
         response = addMovieToMovies(parts, cnx)
-    elif parts[1] == "r":
-        # Print movie ratings with parts[1] as the name of the movie
-        print("Hello")
+    elif parts[0] == "bm":
+        # Delete the movie data from all the related tables: Movies, Actors, etc.
+        response = deleteMovieFromAllTables(parts, cnx)
+    elif parts[0] == "um":
+        response = updateMovieData(parts, cnx)
 
     return response

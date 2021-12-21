@@ -2,6 +2,24 @@ import server
 
 emptySuffix = "(leave empty and press enter if applicable): "
 
+moviesLayman2Fields = [
+	["title", "original_title"],
+	["year_of_release", "date_published"],
+	["duration"],
+	["country"],
+	["language"],
+	["director"],
+	["writer"],
+	["production_company"],
+	["actors"],
+	["description"],
+	["budget"],
+	["usa_gross_income"],
+	["worldwide_gross_income"],
+	["reviews_from_users"],
+	["reviews_from_critics"]
+]
+
 def sendRequest(request):
 	print("Sending request!" + request)
 	return server.parseRequest(request)
@@ -49,11 +67,32 @@ def addMovie():
 
 def deleteMovie():
 	command = "bm$$"
+	command += input("Enter the movie name: ")
+	response = sendRequest(command)
+
+	if not response:
+		print("ERR: Something went wrong while deleting a movie, try again later!")
+
+	return response
+
+def updateMovie():
+	command = "um$$"
+	command += input("Enter the movie name: ")
+	print("What would you like to update (enter the number from the list)?: ")
+
+	printChoices(["Name", "Date published", "Duration", "Country", "Language", "Director", "Writer", "Production company", "Actors", "Description", "Budget", "USA Gross Income", "Worldwide Gross Income", "Number of user reviews", "Number of critic reviews"])
+	fieldsIdx = int(input()) - 1
+	newVal = input("Enter the new data " + emptySuffix)
+	for field in moviesLayman2Fields[fieldsIdx]:
+		command += "$$"
+		command += str(field) + "?=" + str(newVal)
+	
+	response = sendRequest(command)
 	
 
 def main():
 	print("Hello, welcome to our movies database manager! Please enter a command")
-	commandsList = ["am - Add movie", "dm - Delete movie", "r - See movie rating", "h - See commands list", "e - Exit"]
+	commandsList = ["am - Add movie", "dm - Delete movie", "Update movie data", "r - See movie rating", "h - See commands list", "e - Exit"]
 	printChoices(commandsList)
 	responses = []    # List of responses for testing purposes
 
@@ -68,6 +107,8 @@ def main():
 			responses.append(addMovie())
 		elif command == "dm":
 			responses.append(deleteMovie())
+		elif command == "um":
+			responses.append(updateMovie())
 
 		print("\nPlease enter a command, type help or h for the commands!")
 		
