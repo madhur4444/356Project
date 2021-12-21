@@ -4,6 +4,6 @@ LOAD DATA INFILE '/var/lib/mysql-files/Group44/new_ratings.csv' IGNORE INTO TABL
 
 LOAD DATA INFILE '/var/lib/mysql-files/Group44/new_names.csv' IGNORE INTO TABLE Names FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
-LOAD DATA INFILE '/var/lib/mysql-files/Group44/new_movieRoles.csv' IGNORE INTO TABLE MovieRoles FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
-
 LOAD DATA INFILE '/var/lib/mysql-files/Group44/new_movieRoles.csv' IGNORE INTO TABLE MovieRoles FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
+
+LOAD DATA INFILE '/var/lib/mysql-files/Group44/new_genres.csv' IGNORE INTO TABLE Genres FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
