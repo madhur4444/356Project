@@ -57,7 +57,7 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
     return response
 
 def parseRequest(request):
-    parts = request.split()
+    parts = request.split("$$")
 
     response, cnx = connectToDB()
 

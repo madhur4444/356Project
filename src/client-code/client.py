@@ -19,7 +19,7 @@ def main():
 		if command == "help" or command == "h":
 			printChoices(["am - Add movie", "dm - Delete movie from db", "r - See movie rating", "e - Exit"])
 		elif command == "am":
-			command += " "
+			command += "$$"
 			command += input("Enter the movie name: ")
 			response = sendRequest(command)
 			print(response)
