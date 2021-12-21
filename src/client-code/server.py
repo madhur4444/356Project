@@ -1,15 +1,29 @@
 import mysql.connector
 from mysql.connector import errorcode
-from enum import Enum
+import datetime
+
+from mysql.connector.connection import MySQLConnection
 
 Err = {
     "accdenied": "ERR: Access denied to the database, please try again!",
     "baddb": "ERR: Database does not exist, please try later!"
 }
 
-def parseRequest(request):
-    parts = request.split()
-    print("Request parsed" + str(parts))
+def buildResponseObj(headings, rawResponse):
+    response = {}
+    for h in headings:
+        response[h] = []
+
+    # For each row in the response
+    for row in rawResponse:
+        # For each field in the rawResponse row
+        for i in range(len(row)):
+            colName = headings[i % len(headings)]
+            response[colName].append(str(row[i]))
+
+    return response
+
+def connectToDB():
     response = ""
     try:
         cnx = mysql.connector.connect(host="marmoset04.shoshin.uwaterloo.ca",
@@ -23,6 +37,37 @@ def parseRequest(request):
             response = Err["baddb"]
         else:
             print(err)
+    return response, cnx
+
+def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
+    cursor = conn.cursor()
+    if queryParams is None:
+        cursor.execute(query)
     else:
-        cnx.close()
+        cursor.execute(query, queryParams)
+    response = cursor.fetchall()
+
+    if len(response) == 0:
+        response = {"nodata": "true"}
+    
+    else:
+        # print(response)
+        response = buildResponseObj(headings, response)
+    
+    return response
+
+def parseRequest(request):
+    parts = request.split()
+
+    response, cnx = connectToDB()
+
+    if response in Err:
+        return response
+
+    query = ("SELECT * FROM Game LIMIT 5")
+    headings = ["gameID", "season", "gameType", "dateTimeGMT", "awayTeamID",
+                "homeTeamID", "awayGoals", "homeGoals", "outcome", "homeRinkSideStart",
+                "venue", "venueTimeZoneID", "venueTimeZoneOffset", "venueTimeZoneTZ"]
+    response = getQueryResponse(cnx, query, headings, None)
+
     return response
