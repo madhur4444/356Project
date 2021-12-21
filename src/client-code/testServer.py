@@ -2,7 +2,7 @@ import server
 
 def main():
     testcases = [
-        "am$$A$$2021-10-12$$B$$C$$D$$E$$F$$G$$H$$H, I$$J$$K$$L$$M$$N$$$$O$$P"
+        "am$$A$$2021-10-12$$45$$D$$E$$F$$G$$H$$H I$$L$$M$$N$$$$15$$30"
     ]
 
     expected = [
