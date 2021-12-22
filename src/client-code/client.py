@@ -88,6 +88,11 @@ def updateMovie():
 		command += str(field) + "?=" + str(newVal)
 	
 	response = sendRequest(command)
+
+	if not response:
+		print("ERR: Something went wrong while updating a movie, try again later!")
+
+	return response
 	
 
 def main():
