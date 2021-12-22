@@ -10,7 +10,10 @@ def main():
         "mvo$$5",
         "tmxc$$USA$$5",
         "lrm$$5",
-        "awaxy$$"
+        "awaxy$$1910$$1911",
+        "mba$$Asta Nielsen",
+        "mdd$$Charles L. Gaskill",
+        "tmy$$2020$$5"
     ]
 
     expected = [
@@ -55,6 +58,19 @@ def main():
             "Rating": ["1.00", "1.00", "1.00", "1.00", "1.00"],
             "Language": ["Telugu", "Hungarian", "Japanese", "Japanese", "Min Nan, Mandarin"],
             "Duration": ["138", "82", "81", "78", "79"]
+        },
+        {
+            "Name": ["Asta Nielsen", "Emil Albes", "Hugo Flink", "Gunnar Helsengreen", "Valdemar Psilander", "Mary Hagen", "Giuseppe de Liguoro", "Salvatore Papa", "Arturo Pirovano", "Pier Delle Vigne", "Andrey Gromov", "Ivan Mozzhukhin", "N. Semyonov", "Olga Petrova-Zvantseva", "Lea Giunchi", "Augusto Mastripietri", "Polidor", "Natalino Guillaume", "Jovan Antonijevic-Djedo", "Teodora Arsenovic", "Mileva Bosnjakovic", "Dimitrije Ginic", "Vitomir Bogic"]
+        },
+        {
+            "Title": ["Den sorte drøm", "Amleto", "La via senza gioia", "Fante-Anne"],
+            "Language": ["", "German", "German", ""],
+            "Duration": ["53", "131", "125", "93"]
+        },
+        {
+            "Title": ["Cleopatra"],
+            "Language": ["English"],
+            "Duration": ["100"]
         },
         {
 

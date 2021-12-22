@@ -26,13 +26,13 @@ SELECT Movies.title AS Title, Ratings.weighted_average_vote AS Rating, Movies.la
 SELECT DISTINCT Actors.name AS Name from Movies INNER JOIN Actors ON Movies.imdb_title_id = Actors.imdb_title_id where Movies.year_of_release BETWEEN 2000 AND 2020;
 
 -- 10 movies by actor - input(actorName) - output(all movies)
-SELECT Movies.title AS Title FROM Movies INNER JOIN Actors ON Movies.imdb_title_id = Actors.imdb_title_id WHERE Actors.name = 'Fred Astaire';
+SELECT Movies.title AS Title, Movies.language AS Language, Movies.duration AS Duration FROM Movies INNER JOIN Actors ON Movies.imdb_title_id = Actors.imdb_title_id WHERE Actors.name = 'Fred Astaire';
 
 -- 11 All movies directed by a given director - input(director name) - output (movie details)
-SELECT Movies.title AS Title FROM Movies INNER JOIN Directors ON Movies.imdb_title_id = Directors.imdb_title_id WHERE Directors.name = 'Louis Feuillade';
+SELECT Movies.title AS Title, Movies.language AS Language, Movies.duration AS Duration FROM Movies INNER JOIN Directors ON Movies.imdb_title_id = Directors.imdb_title_id WHERE Directors.name = 'Louis Feuillade';
 
 -- 12 Top n movies of year - input (year) - output (movie details)
-SELECT Movies.title AS Title, Ratings.weighted_average_vote AS Rating FROM Movies INNER JOIN Ratings ON Movies.imdb_title_id = Ratings.imdb_title_id WHERE Movies.year_of_release = "1990" ORDER BY Ratings.weighted_average_vote DESC LIMIT 250;
+SELECT Movies.title AS Title, Ratings.weighted_average_vote AS Rating, Movies.language AS Language, Movies.duration AS Duration FROM Movies INNER JOIN Ratings ON Movies.imdb_title_id = Ratings.imdb_title_id WHERE Movies.year_of_release = "1990" ORDER BY Ratings.weighted_average_vote DESC LIMIT 250;
 
 -- 13 Actor that is in both movies x and y - input (movie name 1, movie name 2) - output (Actor details)
 SELECT Actors.name AS 'Name' FROM Movies INNER JOIN Actors ON Movies.imdb_title_id = Actors.imdb_title_id WHERE Movies.title = 'Follie di jazz' AND Name IN (SELECT Actors.name AS 'Name' FROM Movies INNER JOIN Actors ON Movies.imdb_title_id = Actors.imdb_title_id WHERE Movies.title = 'Cenerentola a Parigi');
