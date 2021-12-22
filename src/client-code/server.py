@@ -52,7 +52,7 @@ def update(table, fields, newVals, condition):
 def buildResponseObj(headings, rawResponse):
     response = {}
     for h in headings:
-        response[h] = []
+        response[h[0]] = []
 
     # For each row in the response
     for row in rawResponse:
