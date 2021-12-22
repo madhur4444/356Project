@@ -53,7 +53,7 @@ def buildResponseObj(headings, rawResponse):
     response = {}
     # 
     for h in headings:
-        response[h[0]] = []
+        response[h] = []
 
     # For each row in the response
     for row in rawResponse:
