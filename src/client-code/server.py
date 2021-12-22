@@ -127,7 +127,7 @@ def addMovieToMovies(parts, cnx: MySQLConnection):
     query = "SELECT * FROM Movies;"
     queryParams = []
     response = getQueryResponse(cnx, query, [
-    ["imdb_title_id"]
+    ["imdb_title_id"],
 	["title"],
     ["original_title"],
 	["year_of_release"],
