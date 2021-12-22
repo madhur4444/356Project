@@ -13,7 +13,8 @@ def main():
         "awaxy$$1910$$1911",
         "mba$$Asta Nielsen",
         "mdd$$Charles L. Gaskill",
-        "tmy$$2020$$5"
+        "tmy$$2010$$5",
+        "abmxy$$Follie di jazz$$Cenerentola a Parigi"
     ]
 
     expected = [
@@ -73,7 +74,13 @@ def main():
             "Duration": ["100"]
         },
         {
-
+            "Title": ["Hopeful Notes", "Les Misérables in Concert: The 25th Anniversary", "Inception", "Doraleous and Associates", "Aaranya Kaandam"],
+            "Rating": ["9.70", "8.80", "8.80", "8.60", "8.60"],
+            "Language": ["English", "English", "English, Japanese, French", "English", "Tamil"],
+            "Duration": ["94", "178", "148", "100", "126"]
+        },
+        {
+            "Name": ["Fred Astaire"]
         }
     ]
 
