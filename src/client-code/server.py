@@ -91,7 +91,7 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
         response = {"nodata": "true"}
     
     else:
-        # print(response)
+        print(response)
         response = buildResponseObj(headings, response)
     
     return response
