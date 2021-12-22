@@ -97,7 +97,7 @@ def updateMovie():
 
 def main():
 	print("Hello, welcome to our movies database manager! Please enter a command")
-	commandsList = ["am - Add movie", "dm - Delete movie", "Update movie data", "r - See movie rating", "h - See commands list", "e - Exit"]
+	commandsList = ["am - Add movie", "dm - Delete movie", "um - Update movie data", "h - See commands list", "e - Exit"]
 	printChoices(commandsList)
 	responses = []    # List of responses for testing purposes
 
