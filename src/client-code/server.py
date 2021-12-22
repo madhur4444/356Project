@@ -60,6 +60,8 @@ def buildResponseObj(headings, rawResponse):
         for i in range(len(row)):
             colName = headings[i % len(headings)]
             response[colName].append(str(row[i]))
+    
+    print(response[4])
 
     return response
 
@@ -91,7 +93,7 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
         response = {"nodata": "true"}
     
     else:
-        print(response)
+        # print(response)
         response = buildResponseObj(headings, response)
     
     return response
@@ -124,7 +126,26 @@ def addMovieToMovies(parts, cnx: MySQLConnection):
     print(queryParams)
     query = "SELECT * FROM Movies;"
     queryParams = []
-    response = getQueryResponse(cnx, query, [], queryParams)
+    response = getQueryResponse(cnx, query, [
+    ["imdb_title_id"]
+	["title"],
+    ["original_title"],
+	["year_of_release"],
+    ["date_published"],
+	["duration"],
+	["country"],
+	["language"],
+	["director"],
+	["writer"],
+	["production_company"],
+	["actors"],
+	["description"],
+	["budget"],
+	["usa_gross_income"],
+	["worldwide_gross_income"],
+	["reviews_from_users"],
+	["reviews_from_critics"]
+], queryParams)
     return 'nodata' in response
 
 def deleteMovieFromAllTables(parts, cnx: MySQLConnection):
