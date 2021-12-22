@@ -5,6 +5,7 @@ import random
 import re
 
 from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import MYSQL_CNX_CLASS
 
 Err = {
     "accdenied": "ERR: Access denied to the database, please try again!",
@@ -20,14 +21,38 @@ def insert(table, fields):
     
     return insertQ
 
-def select(table, fields, condition):
-    selectQ = "SELECT " + str(fields[0])
+def join(table1, table2, onClause):
+    return str(table1) + " INNER JOIN " + str(table2) + " ON " + str(onClause)
+
+def select(fields, table, condition = None, orderBy = None, limit = None, distinct = False, subQuery = False):
+
+    # Fields
+    selectQ = "SELECT "
+    if distinct:
+        selectQ += "DISTINCT "
+    selectQ += str(fields[0])
+
+    # If there is a list of fields
     for i in range(1, len(fields)):
         selectQ += ", " + str(fields[i])
+    
+    # From clause
     selectQ += " FROM ( " + str(table) + " )"
+
+    # Where clause
     if condition is not None:
-        selectQ += " " + str(condition)
-    selectQ += ";"
+        selectQ += " WHERE + " + str(condition)
+    
+    # Order by clause
+    if orderBy is not None:
+        selectQ += " ORDER BY " + str(orderBy)
+
+    # Limit clause
+    if limit is not None:
+        selectQ += " LIMIT " + str(limit)
+    
+    if not subQuery:
+        selectQ += ";"
 
     return selectQ
 
@@ -92,13 +117,12 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
         response = {"nodata": "true"}
     
     else:
-        print(response)
         response = buildResponseObj(headings, response)
     
     return response
 
 def getMovieId(movieName, cnx: MySQLConnection):
-    query = select("Movies", "imdb_title_id", "title = '" + str(movieName) + "'")
+    query = select("imdb_title_id", "Movies", "title = '" + str(movieName) + "'", None, None)
     response = getQueryResponse(cnx, query, ["imdb_title_id"], None)
     if "imdb_title_id" in response:
         return response["imdb_title_id"]
@@ -120,8 +144,6 @@ def addMovieToMovies(parts, cnx: MySQLConnection):
     for i in range(3, len(parts)):
         queryParams.append(str(parts[i]))
     query = insert("Movies", queryParams)
-    print(len(queryParams))
-    print(query)
     response = getQueryResponse(cnx, query, [
         "imdb_title_id",
         "title",
@@ -181,6 +203,242 @@ def updateMovieData(parts, cnx: MySQLConnection):
     response = getQueryResponse(cnx, query, [], None)
     return 'nodata' in response
 
+def getTopNMovies(parts, cnx: MySQLConnection):
+
+    # First get n
+    n = int(parts[1])
+
+    # Now, build query
+    query = select(
+        ["Movies.title AS Title", "Ratings.weighted_average_vote AS Rating", "Movies.language AS Language", "Movies.duration AS Duration"],
+        join("Movies", "Ratings", "Movies.imdb_title_id = Ratings.imdb_title_id"),
+        None,
+        "Ratings.weighted_average_vote DESC",
+        str(n)
+    )
+    expectedHeadings = ["Title", "Rating", "Language", "Duration"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getActorsInMovies(parts, cnx: MySQLConnection):
+
+    # First get the movie name
+    movieName = str(parts[1])
+
+    # Now, build query
+    query = select(
+        ['Actors.name AS "Actor Name"'],
+        join("Movies", "Actors", "Movies.imdb_title_id = Actors.imdb_title_id"),
+        "Movies.title = '" + str(movieName) + "'",
+        None,
+        None
+    )
+    expectedHeadings = ["Actor Name"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getTop10MoviesByGenre(parts, cnx: MySQLConnection):
+
+    # First, get the genre and limit
+    genre = str(parts[1])
+    limit = str(parts[2])
+
+    # Now, build the query
+    query = select(
+        ["T1.Name AS 'Name'", "Ratings.weighted_average_vote AS 'Rating'", "T1.Language AS Language", "T1.Duration AS Duration"],
+        join("Ratings",
+            "(" + select(
+                ["Movies.title AS 'Name'", "Genres.genre AS 'genre'", "Movies.imdb_title_id AS 'imdb_title_id'", "Movies.language AS Language", "Movies.duration AS Duration"],
+                join("Movies", "Genres", "Movies.imdb_title_id = Genres.imdb_title_id"),
+                None,
+                None,
+                None,
+                False,
+                True
+            ) + ") AS T1",
+            "T1.imdb_title_id = Ratings.imdb_title_id"),
+        "T1.genre like '%" + str(genre) + "%'",
+        "Ratings.weighted_average_vote DESC",
+        str(limit),
+        True
+    )
+    expectedHeadings = ["Name", "Rating", "Language", "Duration"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getActorsBornByDate(parts, cnx: MySQLConnection):
+
+    # First, get the date
+
+    # If parts[1] exists, request includes month-day format date.
+    if len(parts) > 1:
+        date = "-" + str(parts[1])
+    # Else, use today's date
+    else:
+        date = datetime.today().strftime('-%m-%d')
+    
+    # Now, build the query
+    query = select(
+        ["Names.name AS Name"],
+        join("Names", "MovieRoles", "Names.imdb_name_id = MovieRoles.imdb_name_id"),
+        "(MovieRoles.played_role='actor' AND Names.date_of_birth like '%" + str(date) + "%')",
+        None,
+        None,
+        True
+    )
+    expectedHeadings = ["Name"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getMostVotedNMoviesUS(parts, cnx: MySQLConnection):
+
+    # First, get n
+    n = int(parts[1])
+
+    # Now, build query
+    query = select(
+        ["Movies.title AS Title", "Ratings.us_voters_votes AS Votes", "Movies.language AS Language", "Movies.duration AS Duration"],
+        join("Movies", "Ratings", "Movies.imdb_title_id = Ratings.imdb_title_id"),
+        None,
+        "Ratings.us_voters_votes DESC",
+        str(n)
+    )
+    expectedHeadings = ["Title", "Votes", "Language", "Duration"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getMostVotedNMoviesOverall(parts, cnx: MySQLConnection):
+
+    # First, get n
+    n = int(parts[1])
+
+    # Now, build query
+    query = select(
+        ["Movies.title AS Title", "Ratings.total_votes AS Votes", "Movies.language AS Language", "Movies.duration AS Duration"],
+        join("Movies", "Ratings", "Movies.imdb_title_id = Ratings.imdb_title_id"),
+        None,
+        "Ratings.total_votes DESC",
+        str(n)
+    )
+    expectedHeadings = ["Title", "Votes", "Language", "Duration"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getTopMoviesFromX(parts, cnx):
+
+    # First get the countryName
+    countryName = str(parts[1])
+
+    # Next, get the limit
+    limit = str(parts[2])
+
+    # Now, build the query
+    query = select(
+        ["Movies.title AS Title", "Ratings.weighted_average_vote AS Rating", "Movies.language AS Language", "Movies.duration AS Duration"],
+        join("Movies", "Ratings", "Movies.imdb_title_id = Ratings.imdb_title_id"),
+        "Movies.country LIKE '%" + str(countryName) + "%'",
+        "Ratings.weighted_average_vote DESC",
+        str(limit)
+    )
+    expectedHeadings = ["Title", "Rating", "Language", "Duration"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getLowestRatedMovies(parts, cnx: MySQLConnection):
+
+    # First, get the limit
+    limit = str(parts[1])
+
+    # Now, build the query
+    query = select(
+        ["Movies.title AS Title", "Ratings.weighted_average_vote AS Rating", "Movies.language AS Language", "Movies.duration AS Duration"],
+        join("Movies", "Ratings", "Movies.imdb_title_id = Ratings.imdb_title_id"),
+        None,
+        "Ratings.weighted_average_vote",
+        str(limit)
+    )
+    expectedHeadings = ["Title", "Rating", "Language", "Duration"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getActedBetweenXandY(parts, cnx: MySQLConnection):
+
+    # First get x and y years
+    x = str(parts[1])
+    y = str(parts[2])
+
+     # Now, build the query
+    query = select(
+        ["Actors.name AS Name"],
+        join("Movies", "Actors", "Movies.imdb_title_id = Actors.imdb_title_id"),
+        "Movies.year_of_release BETWEEN " + str(x) + " AND " + str(y),
+        None,
+        None,
+        True
+    )
+    expectedHeadings =["Name"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getMoviesByActor(parts, cnx: MySQLConnection):
+
+    # First, get the actorName
+    actorName = str(parts[1])
+
+    # Now, build the query
+    query = select(
+        ["Movies.title AS Title", "Movies.language AS Language", "Movies.duration AS Duration"],
+        join("Movies", "Actors", "Movies.imdb_title_id = Actors.imdb_title_id"),
+        "Actors.name = '" + str(actorName) + "'"
+    )
+    expectedHeadings = ["Title", "Language", "Duration"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getMoviesByDirector(parts, cnx: MySQLConnection):
+
+    # First, get the directorName
+    directorName = str(parts[1])
+
+    # Now, build the query
+    query = select(
+        ["Movies.title AS Title", "Movies.language AS Language", "Movies.duration AS Duration"],
+        join("Movies", "Directors", "Movies.imdb_title_id = Directors.imdb_title_id"),
+        "Directors.name = '" + str(directorName) + "'"
+    )
+    expectedHeadings = ["Title", "Language", "Duration"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getTopNMoviesOfYear(parts, cnx: MySQLConnection):
+
+    # First, get n and year
+    year = str(parts[1])
+    n = str(parts[2])
+
+    # Now, build the query
+    query = select(
+        ["Movies.title AS Title", "Ratings.weighted_average_vote AS Rating", "Movies.language AS Language", "Movies.duration AS Duration"],
+        join("Movies", "Ratings", "Movies.imdb_title_id = Ratings.imdb_title_id"),
+        "Movies.year_of_release = '" + str(year) + "'",
+        "Ratings.weighted_average_vote DESC",
+        str(n)
+    )
+    expectedHeadings = ["Title", "Rating", "Language", "Duration"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
+
+def getActorsInXandY(parts, cnx: MySQLConnection):
+
+    # First, get x and y movie names
+    x = str(parts[1])
+    y = str(parts[2])
+
+    # Now, build the query
+    query = select(
+        ["Actors.name AS 'Name'"],
+        join("Movies", "Actors", "Movies.imdb_title_id = Actors.imdb_title_id"),
+        "Movies.title = '" + str(x) + "' AND Name IN (" + \
+            select(
+                ["Actors.name AS 'Name'"],
+                join("Movies", "Actors", "Movies.imdb_title_id = Actors.imdb_title_id"),
+                "Movies.title = '" + str(y) + "'",
+                None,
+                None,
+                False,
+                True
+            ) + ")"
+    )
+    expectedHeadings = ["Name"]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
 
 def parseRequest(request):
     parts = request.split("$$")
@@ -198,5 +456,31 @@ def parseRequest(request):
         response = deleteMovieFromAllTables(parts, cnx)
     elif parts[0] == "um":
         response = updateMovieData(parts, cnx)
+    elif parts[0] == "tm":
+        response = getTopNMovies(parts, cnx)
+    elif parts[0] == "actm":
+        response = getActorsInMovies(parts, cnx)
+    elif parts[0] == "tmg":
+        response = getTop10MoviesByGenre(parts, cnx)
+    elif parts[0] == "abt":
+        response = getActorsBornByDate(parts, cnx)
+    elif parts[0] == "mvus":
+        response = getMostVotedNMoviesUS(parts, cnx)
+    elif parts[0] == "mvo":
+        response = getMostVotedNMoviesOverall(parts, cnx)
+    elif parts[0] == "tmxc":
+        response = getTopMoviesFromX(parts, cnx)
+    elif parts[0] == "lrm":
+        response = getLowestRatedMovies(parts, cnx)
+    elif parts[0] == "awaxy":
+        response = getActedBetweenXandY(parts, cnx)
+    elif parts[0] == "mba":
+        response = getMoviesByActor(parts, cnx)
+    elif parts[0] == "mdd":
+        response = getMoviesByDirector(parts, cnx)
+    elif parts[0] == "tmy":
+        response = getTopNMoviesOfYear(parts, cnx)
+    elif parts[0] == "abmxy":
+        response = getActorsInXandY(parts, cnx)
 
     return response

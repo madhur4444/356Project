@@ -28,13 +28,12 @@ def main():
             "Actor Name": ["Blanche Bayliss", "William Courtenay", "Chauncey Depew"]
         },
         {
-            "Name": ["Jeeudo", "Ek", "Lejos de Casa pelicula Venezolana", "Hopeful Notes", "Isha", "Jibon Theke Neya", "The Best Years", "Le ali della libertà", "Hababam Sinifi", "As I Am"],
-            "Rating": ["9.80", "9.80", "9.80", "9.70", "9.50", "9.40", "9.40", "9.30", "9.30", "9.30"],
-            "Language": ["English, Nepali", "Telugu", "Spanish", "English", "Malayalam", "Bengali", "English", "English", "Turkish", "English"],
-            "Duration": ["150", "129", "87", "94", "118", "150", "96", "142", "87", "62"]
-        },
+            'Name': ['Lejos de Casa pelicula Venezolana', 'Ek', 'Jeeudo', 'Hopeful Notes', 'Isha'],
+            'Rating': ['9.80', '9.80', '9.80', '9.70', '9.50'],
+            'Language': ['Spanish', 'Telugu', 'English, Nepali', 'English', 'Malayalam'],
+            'Duration': ['87', '129', '150', '94', '118']},
         {
-            "Name": ["Joss Ackland", "Dennis Farina", "Antonio Sabato Jr.", "Knut Agnred", "Domingo Ambriz", "Albert Augier", "Chester Barnett", "Eric Benz", "Aldo Berti", "Gérard Darmon", "Jimmy Dorsey", "Ken Foree", "Arthur Franz", "Yoshio Harada", "Harvey Jason", "Edward Jobson", "Shane Johnson", "Aleksandr Khochinsky", "Kosti Klemelä", "Ted Le Plat", "James Mitchell", "John Niland", "Ivan Petrov", "Dan Priest", "Alex Rocco", "Ja Rule", "Bjarke Smitt Vestermark", "Eric Stanley", "Vladimir Tikhonov", "René Verreth", "Richard Lewis Warren", "Saul Williams", "Erol Büyükburç", "Marek Richter", "Nejat Isler", "Arnaud Valois", "Peter Scanavino", "Jessie T. Usher", "Dallas Barnett", "Phil Haney", "James Cullen Bressack"]
+            'Name': ['Joss Ackland', 'Dennis Farina', 'Antonio Sabato Jr.', 'Knut Agnred', 'Domingo Ambriz', 'Albert Augier', 'Chester Barnett', 'Eric Benz', 'Aldo Berti', 'Gérard Darmon', 'Jimmy Dorsey', 'Ken Foree', 'Arthur Franz', 'Yoshio Harada', 'Harvey Jason', 'Edward Jobson', 'Shane Johnson', 'Aleksandr Khochinsky', 'Kosti Klemelä', 'Ted Le Plat', 'James Mitchell', 'John Niland', 'Ivan Petrov', 'Dan Priest', 'Alex Rocco', 'Ja Rule', 'Bjarke Smitt Vestermark', 'Eric Stanley', 'Vladimir Tikhonov', 'René Verreth', 'Richard Lewis Warren', 'Saul Williams', 'Erol Büyükburç', 'Marek Richter', 'Nejat Isler', 'Arnaud Valois', 'Peter Scanavino', 'Jessie T. Usher', 'Dallas Barnett', 'Phil Haney', 'James Cullen Bressack']
         },
         {
             "Title": ["Il cavaliere oscuro", "Le ali della libertà", "Pulp Fiction", "Fight Club", "Forrest Gump"],
@@ -85,8 +84,8 @@ def main():
     ]
 
     for i in range(len(testcases)):
-        server.parseRequest(testcases[i])
-        # assert server.parseRequest(testcases[i]) == expected[i]
+        # server.parseRequest(testcases[i])
+        assert server.parseRequest(testcases[i]) == expected[i]
 
 if __name__ == "__main__":
 	main()
