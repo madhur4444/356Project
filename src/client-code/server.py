@@ -104,6 +104,7 @@ def getMovieId(movieName, cnx: MySQLConnection):
 
 def addMovieToMovies(parts, cnx: MySQLConnection):
     queryParams = []
+    # fix title id add one from last entry
     queryParams.append("tt" + str(random.randint(9915000, 9999999))) #id
     queryParams.append(str(parts[1])) # title
     queryParams.append(str(parts[1])) # original title
@@ -120,6 +121,9 @@ def addMovieToMovies(parts, cnx: MySQLConnection):
     query = insert("Movies", queryParams)
     print(len(queryParams))
     print(query)
+    print(queryParams)
+    query = "SELECT * FROM Movies;"
+    queryParams = []
     response = getQueryResponse(cnx, query, [], queryParams)
     return 'nodata' in response
 
