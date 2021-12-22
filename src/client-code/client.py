@@ -28,9 +28,11 @@ def printChoices(choices):
 	for i in range(len(choices)):
 		print(str(i + 1) + ". " + str(choices[i]))
 
+def printResponse(response):
+	print(response)
+
 def addMovie():
-	command = "am$$"
-	command += input("Enter the movie name: ")
+	command = "am$$" + input("Enter the movie name: ")
 	command += "$$"
 	command += input("Enter the date this movie was published " + emptySuffix)
 	command += "$$"
@@ -66,8 +68,7 @@ def addMovie():
 	return response
 
 def deleteMovie():
-	command = "bm$$"
-	command += input("Enter the movie name: ")
+	command = "bm$$" + input("Enter the movie name: ")
 	response = sendRequest(command)
 
 	if not response:
@@ -76,8 +77,7 @@ def deleteMovie():
 	return response
 
 def updateMovie():
-	command = "um$$"
-	command += input("Enter the movie name: ")
+	command = "um$$" + input("Enter the movie name: ")
 	print("What would you like to update (enter the number from the list)?: ")
 
 	printChoices(["Name", "Date published", "Duration", "Country", "Language", "Director", "Writer", "Production company", "Actors", "Description", "Budget", "USA Gross Income", "Worldwide Gross Income", "Number of user reviews", "Number of critic reviews"])
@@ -93,7 +93,73 @@ def updateMovie():
 		print("ERR: Something went wrong while updating a movie, try again later!")
 
 	return response
-	
+
+def execCommandWithNMovies(initialCommand):
+
+	command = initialCommand + "$$" + input("Enter the number of movies: ")
+	printResponse(sendRequest(command))
+
+def printTopNMovies():
+
+	execCommandWithNMovies("tm")
+
+def printActorsInMovie():
+
+	execCommandWithNMovies("actm")
+
+def printTopNMoviesByGenre():
+
+	command = "tmg$$" + input("Enter the genre: ")
+	execCommandWithNMovies(command)
+
+def printActorsBornToday():
+
+	printResponse(sendRequest("abt"))
+
+def printNMostVotedMoviesUS():
+
+	execCommandWithNMovies("mvus")
+
+def printNMostVotedMoviesOverall():
+
+	execCommandWithNMovies("mvo")
+
+def printTopNMoviesFromX():
+
+	command = "tmxc$$" + input("Enter the country name: ") + "$$"
+	command += input("Enter the number of movies: ")
+	printResponse(sendRequest(command))
+
+def printNLowestRatedMovies():
+
+	execCommandWithNMovies("lrm")
+
+def printActedBetweenYearsXAndY():
+
+	command = "awaxy$$" + input("Enter the lowerbound of the years range: ") + "$$"
+	command += input("Enter the upperbound of the years range: ")
+	printResponse(sendRequest(command))
+
+def printMoviesByActor():
+
+	command = "mba$$" + input("Enter the actor's full name: ")
+	printResponse(sendRequest(command))
+
+def printMoviesByDirector():
+
+	command = "mdd$$" + input("Enter the director's full name: ")
+	printResponse(sendRequest(command))
+
+def printTopNMoviesOfYear():
+
+	command = "tmy$$" + input("Enter the year: ")
+	execCommandWithNMovies(command)
+
+def printActedInMoviesXAndY():
+
+	command = "abmxy$$" + input("Enter the name of the first movie: ") + "$$"
+	command += input("Enter the name of the second movie: ")
+	printResponse(sendRequest(command))
 
 def main():
 	print("Hello, welcome to our movies database manager! Please enter a command")
@@ -114,6 +180,32 @@ def main():
 			responses.append(deleteMovie())
 		elif command == "um":
 			responses.append(updateMovie())
+		elif command == "tm":
+			responses.append(printTopNMovies())
+		elif command == "actm":
+			responses.append(printActorsInMovie())
+		elif command == "tmg":
+			responses.append(printTopNMoviesByGenre())
+		elif command == "abt":
+			responses.append(printActorsBornToday())
+		elif command == "mvus":
+			responses.append(printNMostVotedMoviesUS())
+		elif command == "mvo":
+			responses.append(printNMostVotedMoviesOverall())
+		elif command == "tmxc":
+			responses.append(printTopNMoviesFromX())
+		elif command == "lrm":
+			responses.append(printNLowestRatedMovies())
+		elif command == "awaxy":
+			responses.append(printActedBetweenYearsXAndY())
+		elif command == "mba":
+			responses.append(printMoviesByActor())
+		elif command == "mdd":
+			responses.append(printMoviesByDirector())
+		elif command == "tmy":
+			responses.append(printTopNMoviesOfYear())
+		elif command == "abmxy":
+			responses.append(printActedInMoviesXAndY())
 
 		print("\nPlease enter a command, type help or h for the commands!")
 		
