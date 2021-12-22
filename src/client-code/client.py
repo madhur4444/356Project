@@ -20,6 +20,27 @@ moviesLayman2Fields = [
 	["reviews_from_critics"]
 ]
 
+commandsList = [
+	"am - Add movie",
+	"dm - Delete movie",
+	"um - Update movie data",
+	"tm - Top N Movies",
+	"actm - Actors in a movie",
+	"tmg - Top N movies By genre",
+	"abt - Actors born today (day and month)",
+	"mvus - N highest voted movies in the US",
+	"mvo - N highest voted movies in the world",
+	"tmxc - Top movies released in a country",
+	"lrm - N lowest rated movies",
+	"awaxy - Actors who were active in a timeframe (years)",
+	"mba - Movies acted by some actor",
+	"mdd - Movies directed by some director",
+	"tmy - Top N movies of a year",
+	"abmxy - Actors who acted in two specific movies",
+	"h - See commands list",
+	"e - Exit"
+]
+
 def sendRequest(request):
 	print("Sending request!" + request)
 	return server.parseRequest(request)
@@ -163,7 +184,6 @@ def printActedInMoviesXAndY():
 
 def main():
 	print("Hello, welcome to our movies database manager! Please enter a command")
-	commandsList = ["am - Add movie", "dm - Delete movie", "um - Update movie data", "h - See commands list", "e - Exit"]
 	printChoices(commandsList)
 	responses = []    # List of responses for testing purposes
 
