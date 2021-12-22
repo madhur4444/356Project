@@ -62,7 +62,8 @@ def buildResponseObj(headings, rawResponse):
             colName = headings[i % len(headings)]
             response[colName].append(str(row[i]))
     
-    print(response[4])
+    print(response[0])
+    print(response[5])
 
     return response
 
@@ -94,7 +95,7 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
         response = {"nodata": "true"}
     
     else:
-        # print(response)
+        print(response)
         response = buildResponseObj(headings, response)
     
     return response
@@ -122,11 +123,11 @@ def addMovieToMovies(parts, cnx: MySQLConnection):
     for i in range(3, len(parts)):
         queryParams.append(str(parts[i]))
     query = insert("Movies", queryParams)
+    query = "SELECT * FROM Movies;"
+    queryParams = []
     print(len(queryParams))
     print(query)
     print(queryParams)
-    query = "SELECT * FROM Movies;"
-    queryParams = []
     response = getQueryResponse(cnx, query, [
     "imdb_title_id",
 	"title",
