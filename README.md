@@ -4,7 +4,7 @@ This includes the report and all related code in src/
 
 Inside src/, we have the code for sanitizing the csv file, the code for loading the csv file, and the code for the client and server (+ tests for each).
 
-## [**Click for link to ECE 356 Video Demo**](https://drive.google.com/drive/folders/14APdPcb03vSUuKKOA5jyZMM9ycsS5ddD)
+## [**Click for link to ECE 356 Video Deliverable**](https://drive.google.com/drive/folders/14APdPcb03vSUuKKOA5jyZMM9ycsS5ddD)
 
 ## Dependencies
 
