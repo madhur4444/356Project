@@ -49,8 +49,23 @@ def printChoices(choices):
 	for i in range(len(choices)):
 		print(str(i + 1) + ". " + str(choices[i]))
 
-def printResponse(response):
-	print(response)
+def printResponse(response: dict):
+
+	print("Here is your response!")
+	print("*********************")
+
+	# Get number of rows
+	for key in response:
+		numRows = len(response[key])
+		break
+	
+	for i in range(numRows):
+		# Print each column name and value
+		for key in response:
+			print(str(key) + ": " + str(response[key][i]))
+		print("*********************")
+	
+	return response
 
 def addMovie():
 	command = "am$$" + input("Enter the movie name: ")
@@ -118,69 +133,69 @@ def updateMovie():
 def execCommandWithNMovies(initialCommand):
 
 	command = initialCommand + "$$" + input("Enter the number of movies: ")
-	printResponse(sendRequest(command))
+	return printResponse(sendRequest(command))
 
 def printTopNMovies():
 
-	execCommandWithNMovies("tm")
+	return execCommandWithNMovies("tm")
 
 def printActorsInMovie():
 
-	execCommandWithNMovies("actm")
+	return execCommandWithNMovies("actm")
 
 def printTopNMoviesByGenre():
 
 	command = "tmg$$" + input("Enter the genre: ")
-	execCommandWithNMovies(command)
+	return execCommandWithNMovies(command)
 
 def printActorsBornToday():
 
-	printResponse(sendRequest("abt"))
+	return printResponse(sendRequest("abt"))
 
 def printNMostVotedMoviesUS():
 
-	execCommandWithNMovies("mvus")
+	return execCommandWithNMovies("mvus")
 
 def printNMostVotedMoviesOverall():
 
-	execCommandWithNMovies("mvo")
+	return execCommandWithNMovies("mvo")
 
 def printTopNMoviesFromX():
 
 	command = "tmxc$$" + input("Enter the country name: ") + "$$"
 	command += input("Enter the number of movies: ")
-	printResponse(sendRequest(command))
+	return printResponse(sendRequest(command))
 
 def printNLowestRatedMovies():
 
-	execCommandWithNMovies("lrm")
+	return execCommandWithNMovies("lrm")
 
 def printActedBetweenYearsXAndY():
 
 	command = "awaxy$$" + input("Enter the lowerbound of the years range: ") + "$$"
 	command += input("Enter the upperbound of the years range: ")
-	printResponse(sendRequest(command))
+	return printResponse(sendRequest(command))
 
 def printMoviesByActor():
 
 	command = "mba$$" + input("Enter the actor's full name: ")
-	printResponse(sendRequest(command))
+	return printResponse(sendRequest(command))
 
 def printMoviesByDirector():
 
 	command = "mdd$$" + input("Enter the director's full name: ")
-	printResponse(sendRequest(command))
+	return printResponse(sendRequest(command))
 
 def printTopNMoviesOfYear():
 
 	command = "tmy$$" + input("Enter the year: ")
-	execCommandWithNMovies(command)
+	return execCommandWithNMovies(command)
 
 def printActedInMoviesXAndY():
 
 	command = "abmxy$$" + input("Enter the name of the first movie: ") + "$$"
 	command += input("Enter the name of the second movie: ")
-	printResponse(sendRequest(command))
+	return printResponse(sendRequest(command))
 
 def main():
 	print("Hello, welcome to our movies database manager! Please enter a command")
@@ -193,6 +208,7 @@ def main():
 		if command == "help" or command == "h":
 			printChoices(commandsList)
 		elif command == "e" or command == "exit":
+			print("Thank you for using this application!")
 			break
 		elif command == "am":
 			responses.append(addMovie())
