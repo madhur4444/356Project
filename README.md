@@ -18,7 +18,7 @@ You may need to install re:
 
 `pip3 install re`
 
-## Makefile intructions
+## Instructions (How to use the client)
 
 `$ make` or `$ make all`: Starts running the client
 
