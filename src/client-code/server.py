@@ -222,22 +222,22 @@ def getMovieDetails(parts, cnx: MySQLConnection):
     # Now, build query
     query = select([
             "title AS Title",
-            "original_title AS Original Title",
+            "original_title AS 'Original Title'",
             "year_of_release AS Year",
-            "date_published AS Date Published",
+            "date_published AS 'Date Published'",
             "duration AS Duration",
             "country AS Country",
             "language AS Language",
             "director AS Director(s)",
             "writer AS Writer(s)",
-            "production_company AS Production Company",
+            "production_company AS 'Production Company'",
             "actors AS Actor(s)",
             "description AS Description",
             "budget AS Budget",
-            "usa_gross_income AS USA Gross Income",
-            "worlwide_gross_income AS Worldwide Gross Income",
-            "reviews_from_users AS Number of User Reviews",
-            "reviews_from_critics AS Number of Critic Reviews"
+            "usa_gross_income AS 'USA Gross Income'",
+            "worlwide_gross_income AS 'Worldwide Gross Income'",
+            "reviews_from_users AS 'Number of User Reviews'",
+            "reviews_from_critics AS 'Number of Critic Reviews'"
         ],
         "Movies",
         "title = '" + str(movieName) + "'"
