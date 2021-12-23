@@ -111,7 +111,6 @@ def main():
     ]
 
     for i in range(len(testcases)):
-        # server.parseRequest(testcases[i])
         assert server.parseRequest(testcases[i]) == expected[i]
 
 if __name__ == "__main__":

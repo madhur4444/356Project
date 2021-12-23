@@ -10,6 +10,10 @@ Err = {
     "baddb": "ERR: Database does not exist, please try later!"
 }
 
+# Wrapper function for insert statement.
+# This is to ensure code is easier to write and debug.
+# The caller just needs to ensure the parameters are met
+# and they can be fairly certain there will not be a syntax error in the query.
 def insert(table, fields):
     insertQ = "INSERT INTO " + str(table)
     insertQ += " VALUES ('" + str(fields[0]) + "'"
@@ -19,9 +23,17 @@ def insert(table, fields):
     
     return insertQ
 
+# Wrapper function for join clause.
+# This is to ensure code is easier to write and debug.
+# The caller just needs to ensure the parameters are met
+# and they can be fairly certain there will not be a syntax error in the query.
 def join(table1, table2, onClause):
     return str(table1) + " INNER JOIN " + str(table2) + " ON " + str(onClause)
 
+# Wrapper function for select statement.
+# This is to ensure code is easier to write and debug.
+# The caller just needs to ensure the parameters are met
+# and they can be fairly certain there will not be a syntax error in the query.
 def select(fields, table, condition = None, orderBy = None, limit = None, distinct = False, subQuery = False):
 
     # Fields
@@ -54,12 +66,20 @@ def select(fields, table, condition = None, orderBy = None, limit = None, distin
 
     return selectQ
 
+# Wrapper function for delete statement.
+# This is to ensure code is easier to write and debug.
+# The caller just needs to ensure the parameters are met
+# and they can be fairly certain there will not be a syntax error in the query.
 def delete(table, condition):
     deleteQ = "DELETE FROM " + str(table)
     deleteQ += " WHERE " + str(condition) + ";"
 
     return deleteQ
 
+# Wrapper function for update statement.
+# This is to ensure code is easier to write and debug.
+# The caller just needs to ensure the parameters are met
+# and they can be fairly certain there will not be a syntax error in the query.
 def update(table, fields, newVals, condition):
     updateQ = "UPDATE ( " + str(table) + " ) SET "
     updateQ += str(fields[0]) + " = '"  + str(newVals[0]) + "'"
@@ -72,6 +92,13 @@ def update(table, fields, newVals, condition):
 
     return updateQ
 
+# Builds a response object from the raw response received from the connection via SQL
+# It takes in headings as an input since the raw reponse does not contain the column names or headings
+# Response object format: {
+#    "colName1": [col1row1Val, col1ro2Val, col1row3Val],
+#    "colName2": [col2row1Val, col2ro2Val, col2row3Val],
+#    "colName3": [col3row1Val, col3ro2Val, col3row3Val]
+# }
 def buildResponseObj(headings, rawResponse):
     response = {}
     # 
@@ -87,6 +114,8 @@ def buildResponseObj(headings, rawResponse):
 
     return response
 
+# Connects to database
+# Sends error if could not connect
 def connectToDB():
     response = ""
     try:
@@ -103,6 +132,7 @@ def connectToDB():
             print(err)
     return response, cnx
 
+# Get query response for input query with expected headings
 def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
     cursor = conn.cursor()
     if queryParams is None:
@@ -119,12 +149,14 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
     
     return response
 
+# Helper function: Get title id of a input movie
 def getMovieId(movieName, cnx: MySQLConnection):
     query = select(["imdb_title_id"], "Movies", "title = '" + str(movieName) + "'", None, None)
     response = getQueryResponse(cnx, query, ["imdb_title_id"], None)
     if "imdb_title_id" in response:
         return response["imdb_title_id"][0]
 
+# Helper function: Get the last index of the Movies table in int format (without the "tt")
 def getLastIndex(cnx: MySQLConnection):
     query = select(
         ["imdb_title_id"],
@@ -500,6 +532,7 @@ def getActorsInXandY(parts, cnx: MySQLConnection):
     expectedHeadings = ["Name"]
     return getQueryResponse(cnx, query, expectedHeadings, None)
 
+# This is the function the client calls and returns a response
 def parseRequest(request):
     parts = request.split("$$")
 
