@@ -1,6 +1,6 @@
 import mysql.connector
 from mysql.connector import errorcode
-import datetime
+from datetime import datetime
 import re
 
 from mysql.connector.connection import MySQLConnection
