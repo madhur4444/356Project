@@ -87,31 +87,18 @@ def addMovie():
 	command = "am" + getInput("Enter the movie name: ", True)
 	command += getInput("Enter the date this movie was published ", False)
 	command += getInput("Enter the duration ", False)
-	temp = input("Enter the countries where the movie was released separated by commas " + emptySuffix)
-	command += delim
-	temp = input("Enter the languages of your targeted audience separated by commas " + emptySuffix)
-	command += delim
-	temp = input("Enter the director(s), separated by commas(if more than one) " + emptySuffix)
-	command += delim
-	temp = input("Enter the writers separated by commas " + emptySuffix)
-	command += delim
-	temp = input("Enter the production companies, separated by commas(if more than one) " + emptySuffix)
-	command += delim
-	temp = input("Enter the actors and actresses separated by commas " + emptySuffix)
-	command += delim
-	command += input("Enter the description " + emptySuffix)
-	command += delim
-	temp = input("Enter the budget " + emptySuffix)
-	command += delim
-	temp = input("Enter the gross income - USA " + emptySuffix)
-	command += delim
-	temp = input("Enter the gross income worldwide " + emptySuffix)
-	command += delim # Empty field for metascore
-	temp = input("Enter the number of user and critic reviews separated by commas " + emptySuffix)
-	temp = temp.split(',')
-	for c in temp:
-		command += delim
-		command += c.strip()
+	command += getInput("Enter the countries where the movie was released separated by commas ", False)
+	command += getInput("Enter the languages of your targeted audience separated by commas ", False)
+	command += getInput("Enter the director(s), separated by commas(if more than one) ", False)
+	command += getInput("Enter the writers separated by commas ", False)
+	command += getInput("Enter the production companies, separated by commas(if more than one) ", False)
+	command += getInput("Enter the actors and actresses separated by commas ", False)
+	command += getInput("Enter the description ", False)
+	command += getInput("Enter the budget ", False)
+	command += getInput("Enter the gross income - USA ", False)
+	command += getInput("Enter the gross income worldwide ", False)
+	command += getInput("Enter the number of user reviews ", False)
+	command += getInput("Enter the number of critic reviews ", False)
 	response = sendRequest(command)
 
 	if not response:
@@ -120,7 +107,7 @@ def addMovie():
 	return response
 
 def deleteMovie():
-	command = "bm" + delim + input("Enter the movie name: ")
+	command = "dm" + getInput("Enter the movie name: ", True)
 	response = sendRequest(command)
 
 	if not response:
@@ -129,12 +116,12 @@ def deleteMovie():
 	return response
 
 def updateMovie():
-	command = "um" + delim + input("Enter the movie name: ")
+	command = "um" + getInput("Enter the movie name: ", True)
 	print("What would you like to update (enter the number from the list)?: ")
 
 	printChoices(["Name", "Date published", "Duration", "Country", "Language", "Director", "Writer", "Production company", "Actors", "Description", "Budget", "USA Gross Income", "Worldwide Gross Income", "Number of user reviews", "Number of critic reviews"])
 	fieldsIdx = int(input()) - 1
-	newVal = input("Enter the new data " + emptySuffix)
+	newVal = getInput("Enter the new data ", True)
 	for field in moviesLayman2Fields[fieldsIdx]:
 		command += delim
 		command += str(field) + "?=" + str(newVal)

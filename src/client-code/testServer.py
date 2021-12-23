@@ -2,6 +2,9 @@ import server
 
 def main():
     testcases = [
+        "am$$Spider-Man: No Way Home$$2021-12-16$$146$$USA, India, Canada$$English$$Jon Watts$$$$Marvel Studios$$Tom Holland, Zendaya, Benedict Cumberbatch, Jacob Batalon, Jon Favreau$$Spider-Man: No Way Home is a 2021 American superhero film based on the Marvel Comics character Spider-Man, co-produced by Columbia Pictures and Marvel Studios and distributed by Sony Pictures Releasing. It is the sequel to Spider-Man: Homecoming (2017) and Spider-Man: Far From Home (2019), and is the 27th film in the Marvel Cinematic Universe (MCU).$$$200,000,000$$$328,000,000$$$751,300,000$$1297$$327",
+        "um$$Spider-Man: No Way Home$$3$$148",
+        "dm$$Spider-Man: No Way Home",
         "tm$$5",
         "actm$$Miss Jerry",
         "tmg$$Drama$$5",
@@ -18,6 +21,9 @@ def main():
     ]
 
     expected = [
+        {"nodata": "true"},
+        {"nodata": "true"},
+        {"nodata": "true"},
         { 
             "Title": ["Suvarna Sundari", "Lejos de Casa pelicula Venezolana", "Jeeudo", "Ek", "Notuku Potu"],
             "Rating": ["9.90", "9.80", "9.80", "9.80", "9.80"],
@@ -31,7 +37,8 @@ def main():
             'Name': ['Lejos de Casa pelicula Venezolana', 'Ek', 'Jeeudo', 'Hopeful Notes', 'Isha'],
             'Rating': ['9.80', '9.80', '9.80', '9.70', '9.50'],
             'Language': ['Spanish', 'Telugu', 'English, Nepali', 'English', 'Malayalam'],
-            'Duration': ['87', '129', '150', '94', '118']},
+            'Duration': ['87', '129', '150', '94', '118']
+        },
         {
             'Name': ['Joss Ackland', 'Dennis Farina', 'Antonio Sabato Jr.', 'Knut Agnred', 'Domingo Ambriz', 'Albert Augier', 'Chester Barnett', 'Eric Benz', 'Aldo Berti', 'Gérard Darmon', 'Jimmy Dorsey', 'Ken Foree', 'Arthur Franz', 'Yoshio Harada', 'Harvey Jason', 'Edward Jobson', 'Shane Johnson', 'Aleksandr Khochinsky', 'Kosti Klemelä', 'Ted Le Plat', 'James Mitchell', 'John Niland', 'Ivan Petrov', 'Dan Priest', 'Alex Rocco', 'Ja Rule', 'Bjarke Smitt Vestermark', 'Eric Stanley', 'Vladimir Tikhonov', 'René Verreth', 'Richard Lewis Warren', 'Saul Williams', 'Erol Büyükburç', 'Marek Richter', 'Nejat Isler', 'Arnaud Valois', 'Peter Scanavino', 'Jessie T. Usher', 'Dallas Barnett', 'Phil Haney', 'James Cullen Bressack']
         },
