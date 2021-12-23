@@ -84,7 +84,7 @@ def getInput(prompt, isRequired):
 	return inp
 
 def addMovie():
-	command = "am" + delim + input("Enter the movie name: ")
+	command = "am" + delim + getInput("Enter the movie name: ", True)
 	command += delim
 	command += input("Enter the date this movie was published " + emptySuffix)
 	command += delim
