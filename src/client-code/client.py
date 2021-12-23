@@ -263,3 +263,15 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
+'''
+Video:
+
+What to explain:
+1. ER Diagram
+2. Sanitizing and Loading data
+3. Code (normal + test suite)
+
+Harshit: ER Diagram + sanitizing/loading
+Kartikeya: Code + outro
+'''
