@@ -69,6 +69,18 @@ def printResponse(response: dict):
 	
 	return response
 
+def getInput(prompt, isRequired):
+
+	if isRequired:
+		while True:
+			inp = input(prompt)
+			if inp != "\n":
+				break
+	else:
+		inp = input(prompt + emptySuffix)
+	
+	return inp
+
 def addMovie():
 	command = "am" + delim + input("Enter the movie name: ")
 	command += delim
