@@ -58,19 +58,21 @@ def addMovie():
 	command += input("Enter the date this movie was published " + emptySuffix)
 	command += "$$"
 	command += input("Enter the duration " + emptySuffix)
-	temp = input("Enter the country and language of your targeted audience separated by commas " + emptySuffix)
-	temp = temp.split(',')
-	for c in temp:
-		command += "$$"
-		command += c.strip()
-	temp = input("Enter the director, writer, production company and actors separated by commas " + emptySuffix)
-	temp = temp.split(',')
-	for c in temp:
-		command += "$$"
-		command += c.strip()
+	command += "$$"
+	temp = input("Enter the countries where the movie was released separated by commas " + emptySuffix)
+	command += "$$"
+	temp = input("Enter the languages of your targeted audience separated by commas " + emptySuffix)
+	command += "$$"
+	temp = input("Enter the director(s), separated by commas(if more than one) " + emptySuffix)
+	command += "$$"
+	temp = input("Enter the writers separated by commas " + emptySuffix)
+	command += "$$"
+	temp = input("Enter the production companies, separated by commas(if more than one) " + emptySuffix)
+	command += "$$"
+	temp = input("Enter the actors and actresses separated by commas " + emptySuffix)
 	command += "$$"
 	command += input("Enter the description " + emptySuffix)
-	temp = input("Enter the budget, and gross income - USA and worldwide, separated by commas " + emptySuffix)
+	temp = input("Enter the budget, gross income - USA and gross income worldwide, separated by commas " + emptySuffix)
 	temp = temp.split(',')
 	for c in temp:
 		command += "$$"
