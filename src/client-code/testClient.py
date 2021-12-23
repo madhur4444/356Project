@@ -4,23 +4,23 @@ import client
 
 def main():
     testcases = [
-        "am\nSpider-Man: No Way Home\n2021-12-16\n146\nUSA, India, Canada\nEnglish\nJon Watts\n\nMarvel Studios\nTom Holland, Zendaya, Benedict Cumberbatch, Jacob Batalon, Jon Favreau\nSpider-Man: No Way Home is a 2021 American superhero film based on the Marvel Comics character Spider-Man, co-produced by Columbia Pictures and Marvel Studios and distributed by Sony Pictures Releasing. It is the sequel to Spider-Man: Homecoming (2017) and Spider-Man: Far From Home (2019), and is the 27th film in the Marvel Cinematic Universe (MCU).\n$200,000,000\n$328,000,000\n$751,300,000\n1297\n327\n",
-        "gmd\nSpider-Man: No Way Home\n",
-        "um\nSpider-Man: No Way Home\n3\n148\n",
-        "dm\nSpider-Man: No Way Home\n",
-        "tm\n5\n",
-        "actm\nMiss Jerry\n",
-        "tmg\nDrama\n5\n",
-        "abt\n02-29\n",
-        "mvus\n5\n",
-        "mvo\n5\n",
-        "tmxc\nUSA\n5\n",
-        "lrm\n5\n",
-        "awaxy\n1910\n1911\n",
-        "mba\nAsta Nielsen\n",
-        "mdd\nCharles L. Gaskill\n",
-        "tmy\n2010\n5\n",
-        "abmxy\nFollie di jazz\nCenerentola a Parigi\n"
+        "am\nSpider-Man: No Way Home\n2021-12-16\n146\nUSA, India, Canada\nEnglish\nJon Watts\n\nMarvel Studios\nTom Holland, Zendaya, Benedict Cumberbatch, Jacob Batalon, Jon Favreau\nSpider-Man: No Way Home is a 2021 American superhero film based on the Marvel Comics character Spider-Man, co-produced by Columbia Pictures and Marvel Studios and distributed by Sony Pictures Releasing. It is the sequel to Spider-Man: Homecoming (2017) and Spider-Man: Far From Home (2019), and is the 27th film in the Marvel Cinematic Universe (MCU).\n$200,000,000\n$328,000,000\n$751,300,000\n1297\n327\ne\n",
+        "gmd\nSpider-Man: No Way Home\ne\n",
+        "um\nSpider-Man: No Way Home\n3\n148\ne\n",
+        "dm\nSpider-Man: No Way Home\ne\n",
+        "tm\n5\ne\n",
+        "actm\nMiss Jerry\ne\n",
+        "tmg\nDrama\n5\ne\n",
+        "abt\n02-29\ne\n",
+        "mvus\n5\ne\n",
+        "mvo\n5\ne\n",
+        "tmxc\nUSA\n5\ne\n",
+        "lrm\n5\ne\n",
+        "awaxy\n1910\n1911\ne\n",
+        "mba\nAsta Nielsen\ne\n",
+        "mdd\nCharles L. Gaskill\ne\n",
+        "tmy\n2010\n5\ne\n",
+        "abmxy\nFollie di jazz\nCenerentola a Parigi\ne\n"
     ]
 
     expected = [
