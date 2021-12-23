@@ -20,10 +20,10 @@ You may need to install re:
 
 ## Makefile intructions
 
-`make all/make`: Starts running the client
+`$ make` or `$ make all`: Starts running the client
 
-`make client`: Starts running the client
+`$ make client`: Starts running the client
 
-`make testClient`: Runs the test suite for the client
+`$ make testClient`: Runs the test suite for the client
 
-`make testServer`: Runs the test suite for the server
+`$ make testServer`: Runs the test suite for the server
