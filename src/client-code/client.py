@@ -148,7 +148,7 @@ def updateMovie():
 
 def execCommandWithNMovies(initialCommand):
 
-	command = initialCommand + delim + input("Enter the number of movies: ")
+	command = initialCommand + getInput("Enter the number of movies: ", True)
 	return printResponse(sendRequest(command))
 
 def printTopNMovies():
@@ -161,7 +161,7 @@ def printActorsInMovie():
 
 def printTopNMoviesByGenre():
 
-	command = "tmg" + delim + input("Enter the genre: ")
+	command = "tmg" + getInput("Enter the genre: ", True)
 	return execCommandWithNMovies(command)
 
 def printActorsBornToday():
@@ -178,9 +178,8 @@ def printNMostVotedMoviesOverall():
 
 def printTopNMoviesFromX():
 
-	command = "tmxc" + delim + input("Enter the country name: ") + delim
-	command += input("Enter the number of movies: ")
-	return printResponse(sendRequest(command))
+	command = "tmxc" + getInput("Enter the country name: ", True)
+	return execCommandWithNMovies(command)
 
 def printNLowestRatedMovies():
 
@@ -188,18 +187,18 @@ def printNLowestRatedMovies():
 
 def printActedBetweenYearsXAndY():
 
-	command = "awaxy" + delim + input("Enter the lowerbound of the years range: ") + delim
-	command += input("Enter the upperbound of the years range: ")
+	command = "awaxy" + getInput("Enter the lowerbound of the years range: ", True)
+	command += getInput("Enter the upperbound of the years range: ", True)
 	return printResponse(sendRequest(command))
 
 def printMoviesByActor():
 
-	command = "mba" + delim + input("Enter the actor's full name: ")
+	command = "mba" + getInput("Enter the actor's full name: ", True)
 	return printResponse(sendRequest(command))
 
 def printMoviesByDirector():
 
-	command = "mdd" + delim + input("Enter the director's full name: ")
+	command = "mdd" + getInput("Enter the director's full name: ", True)
 	return printResponse(sendRequest(command))
 
 def printTopNMoviesOfYear():
