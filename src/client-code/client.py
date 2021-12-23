@@ -71,13 +71,15 @@ def printResponse(response: dict):
 
 def getInput(prompt, isRequired):
 
+	inp = delim
 	if isRequired:
 		while True:
-			inp = input(prompt)
-			if inp != "\n":
+			temp = input(prompt)
+			if temp != "\n":
+				inp += temp
 				break
 	else:
-		inp = input(prompt + emptySuffix)
+		inp += input(prompt + emptySuffix)
 	
 	return inp
 
