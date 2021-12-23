@@ -84,12 +84,9 @@ def getInput(prompt, isRequired):
 	return inp
 
 def addMovie():
-	command = "am" + delim + getInput("Enter the movie name: ", True)
-	command += delim
-	command += input("Enter the date this movie was published " + emptySuffix)
-	command += delim
-	command += input("Enter the duration " + emptySuffix)
-	command += delim
+	command = "am" + getInput("Enter the movie name: ", True)
+	command += getInput("Enter the date this movie was published ", False)
+	command += getInput("Enter the duration ", False)
 	temp = input("Enter the countries where the movie was released separated by commas " + emptySuffix)
 	command += delim
 	temp = input("Enter the languages of your targeted audience separated by commas " + emptySuffix)
