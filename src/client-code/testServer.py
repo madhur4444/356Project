@@ -3,6 +3,7 @@ import server
 def main():
     testcases = [
         "am$$Spider-Man: No Way Home$$2021-12-16$$146$$USA, India, Canada$$English$$Jon Watts$$$$Marvel Studios$$Tom Holland, Zendaya, Benedict Cumberbatch, Jacob Batalon, Jon Favreau$$Spider-Man: No Way Home is a 2021 American superhero film based on the Marvel Comics character Spider-Man, co-produced by Columbia Pictures and Marvel Studios and distributed by Sony Pictures Releasing. It is the sequel to Spider-Man: Homecoming (2017) and Spider-Man: Far From Home (2019), and is the 27th film in the Marvel Cinematic Universe (MCU).$$$200,000,000$$$328,000,000$$$751,300,000$$1297$$327",
+        "gmd$$Spider-Man: No Way Home",
         "um$$Spider-Man: No Way Home$$3$$148",
         "dm$$Spider-Man: No Way Home",
         "tm$$5",
@@ -21,9 +22,28 @@ def main():
     ]
 
     expected = [
-        {"nodata": "true"},
-        {"nodata": "true"},
-        {"nodata": "true"},
+        True,
+        {
+            "Title": ["Spider-Man: No Way Home"],
+            "Original Title": ["Spider-Man: No Way Home"],
+            "Year": ["2021"],
+            "Date Published": ["2021-12-16"],
+            "Duration": ["146"],
+            "Country": ["USA, India, Canada"],
+            "Language": ["English"],
+            "Director(s)": ["Jon Watts"],
+            "Writer(s)": [""],
+            "Production Company": ["Marvel Studios"]
+            "Actor(s)": ["Tom Holland, Zendaya, Benedict Cumberbatch, Jacob Batalon, Jon Favreau"],
+            "Description": ["Spider-Man: No Way Home is a 2021 American superhero film based on the Marvel Comics character Spider-Man, co-produced by Columbia Pictures and Marvel Studios and distributed by Sony Pictures Releasing. It is the sequel to Spider-Man: Homecoming (2017) and Spider-Man: Far From Home (2019), and is the 27th film in the Marvel Cinematic Universe (MCU)."],
+            "Budget": ["$200,000,000"],
+            "USA Gross Income": ["$328,000,000"],
+            "Worldwide Gross Income": ["$751,300,000"],
+            "Number of User Reviews": ["1297"],
+            "Number of Critic Reviews": ["327"]
+        },
+        True,
+        True,
         { 
             "Title": ["Suvarna Sundari", "Lejos de Casa pelicula Venezolana", "Jeeudo", "Ek", "Notuku Potu"],
             "Rating": ["9.90", "9.80", "9.80", "9.80", "9.80"],
