@@ -49,7 +49,7 @@ commandsList = [
 
 # Calls parseRequest of the server with the input request
 def sendRequest(request):
-	print("Sending request!" + request)
+	#print("Sending request!" + request)
 	return server.parseRequest(request)
 
 def printChoices(choices):
