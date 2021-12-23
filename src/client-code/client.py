@@ -26,6 +26,7 @@ commandsList = [
 	"am - Add movie",
 	"dm - Delete movie",
 	"um - Update movie data",
+	"gmd - Get Movie Details",
 	"tm - Top N Movies",
 	"actm - Actors in a movie",
 	"tmg - Top N movies By genre",
