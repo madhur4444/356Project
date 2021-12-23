@@ -12,9 +12,9 @@ Err = {
 
 def insert(table, fields):
     insertQ = "INSERT INTO " + str(table)
-    insertQ += " VALUES (%s"
-    for i in range(len(fields) - 1):
-        insertQ += ", %s"
+    insertQ += " VALUES ('" + str(fields[0]) + "'"
+    for i in range(1, len(fields)):
+        insertQ += ", '" + str(fields[i]) + "'"
     insertQ += ");"
     
     return insertQ
@@ -39,7 +39,7 @@ def select(fields, table, condition = None, orderBy = None, limit = None, distin
 
     # Where clause
     if condition is not None:
-        selectQ += " WHERE + " + str(condition)
+        selectQ += " WHERE " + str(condition)
     
     # Order by clause
     if orderBy is not None:
@@ -55,7 +55,7 @@ def select(fields, table, condition = None, orderBy = None, limit = None, distin
     return selectQ
 
 def delete(table, condition):
-    deleteQ = "DELETE FROM ( " + str(table) + " )"
+    deleteQ = "DELETE FROM " + str(table)
     deleteQ += " WHERE " + str(condition) + ";"
 
     return deleteQ
@@ -123,7 +123,7 @@ def getMovieId(movieName, cnx: MySQLConnection):
     query = select(["imdb_title_id"], "Movies", "title = '" + str(movieName) + "'", None, None)
     response = getQueryResponse(cnx, query, ["imdb_title_id"], None)
     if "imdb_title_id" in response:
-        return response["imdb_title_id"]
+        return response["imdb_title_id"][0]
 
 def getLastIndex(cnx: MySQLConnection):
     query = select(
@@ -174,7 +174,7 @@ def addMovieToMovies(parts, cnx: MySQLConnection):
         "worldwide_gross_income",
         "reviews_from_users",
         "reviews_from_critics"
-    ], queryParams)
+    ], None)
     return 'nodata' in response
 
 def deleteMovieFromAllTables(parts, cnx: MySQLConnection):
@@ -511,7 +511,7 @@ def parseRequest(request):
     if parts[0] == "am":
         # Add movie with details in the other parts
         response = addMovieToMovies(parts, cnx)
-    elif parts[0] == "bm":
+    elif parts[0] == "dm":
         # Delete the movie data from all the related tables: Movies, Actors, etc.
         response = deleteMovieFromAllTables(parts, cnx)
     elif parts[0] == "um":
