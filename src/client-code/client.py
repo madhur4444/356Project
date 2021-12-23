@@ -1,5 +1,7 @@
 import server
 
+delim = "$$"
+
 emptySuffix = "(leave empty and press enter if applicable): "
 
 moviesLayman2Fields = [
@@ -49,39 +51,69 @@ def printChoices(choices):
 	for i in range(len(choices)):
 		print(str(i + 1) + ". " + str(choices[i]))
 
-def printResponse(response):
-	print(response)
+def printResponse(response: dict):
+
+	print("Here is your response!")
+	print("*********************")
+
+	# Get number of rows
+	for key in response:
+		numRows = len(response[key])
+		break
+	
+	for i in range(numRows):
+		# Print each column name and value
+		for key in response:
+			print(str(key) + ": " + str(response[key][i]))
+		print("*********************")
+	
+	return response
+
+def getInput(prompt, isRequired):
+
+	inp = delim
+	if isRequired:
+		while True:
+			temp = input(prompt)
+			if temp != "\n":
+				inp += temp
+				break
+	else:
+		inp += input(prompt + emptySuffix)
+	
+	return inp
 
 def addMovie():
-	command = "am$$" + input("Enter the movie name: ")
-	command += "$$"
+	command = "am" + delim + input("Enter the movie name: ")
+	command += delim
 	command += input("Enter the date this movie was published " + emptySuffix)
-	command += "$$"
+	command += delim
 	command += input("Enter the duration " + emptySuffix)
-	command += "$$"
+	command += delim
 	temp = input("Enter the countries where the movie was released separated by commas " + emptySuffix)
-	command += "$$"
+	command += delim
 	temp = input("Enter the languages of your targeted audience separated by commas " + emptySuffix)
-	command += "$$"
+	command += delim
 	temp = input("Enter the director(s), separated by commas(if more than one) " + emptySuffix)
-	command += "$$"
+	command += delim
 	temp = input("Enter the writers separated by commas " + emptySuffix)
-	command += "$$"
+	command += delim
 	temp = input("Enter the production companies, separated by commas(if more than one) " + emptySuffix)
-	command += "$$"
+	command += delim
 	temp = input("Enter the actors and actresses separated by commas " + emptySuffix)
-	command += "$$"
+	command += delim
 	command += input("Enter the description " + emptySuffix)
-	temp = input("Enter the budget, gross income - USA and gross income worldwide, separated by commas " + emptySuffix)
-	temp = temp.split(',')
-	for c in temp:
-		command += "$$"
-		command += c.strip()
-	command += "$$" # Empty field for metascore
+	command += delim
+	temp = input("Enter the budget " + emptySuffix)
+	command += delim
+	temp = input("Enter the gross income - USA " + emptySuffix)
+	command += delim
+	temp = input("Enter the gross income worldwide " + emptySuffix)
+	command += delim # Empty field for metascore
 	temp = input("Enter the number of user and critic reviews separated by commas " + emptySuffix)
 	temp = temp.split(',')
 	for c in temp:
-		command += "$$"
+		command += delim
 		command += c.strip()
 	response = sendRequest(command)
 
@@ -91,7 +123,7 @@ def addMovie():
 	return response
 
 def deleteMovie():
-	command = "bm$$" + input("Enter the movie name: ")
+	command = "bm" + delim + input("Enter the movie name: ")
 	response = sendRequest(command)
 
 	if not response:
@@ -100,14 +132,14 @@ def deleteMovie():
 	return response
 
 def updateMovie():
-	command = "um$$" + input("Enter the movie name: ")
+	command = "um" + delim + input("Enter the movie name: ")
 	print("What would you like to update (enter the number from the list)?: ")
 
 	printChoices(["Name", "Date published", "Duration", "Country", "Language", "Director", "Writer", "Production company", "Actors", "Description", "Budget", "USA Gross Income", "Worldwide Gross Income", "Number of user reviews", "Number of critic reviews"])
 	fieldsIdx = int(input()) - 1
 	newVal = input("Enter the new data " + emptySuffix)
 	for field in moviesLayman2Fields[fieldsIdx]:
-		command += "$$"
+		command += delim
 		command += str(field) + "?=" + str(newVal)
 	
 	response = sendRequest(command)
@@ -119,70 +151,70 @@ def updateMovie():
 
 def execCommandWithNMovies(initialCommand):
 
-	command = initialCommand + "$$" + input("Enter the number of movies: ")
-	printResponse(sendRequest(command))
+	command = initialCommand + delim + input("Enter the number of movies: ")
+	return printResponse(sendRequest(command))
 
 def printTopNMovies():
 
-	execCommandWithNMovies("tm")
+	return execCommandWithNMovies("tm")
 
 def printActorsInMovie():
 
-	execCommandWithNMovies("actm")
+	return execCommandWithNMovies("actm")
 
 def printTopNMoviesByGenre():
 
-	command = "tmg$$" + input("Enter the genre: ")
-	execCommandWithNMovies(command)
+	command = "tmg" + delim + input("Enter the genre: ")
+	return execCommandWithNMovies(command)
 
 def printActorsBornToday():
 
-	printResponse(sendRequest("abt"))
+	return printResponse(sendRequest("abt"))
 
 def printNMostVotedMoviesUS():
 
-	execCommandWithNMovies("mvus")
+	return execCommandWithNMovies("mvus")
 
 def printNMostVotedMoviesOverall():
 
-	execCommandWithNMovies("mvo")
+	return execCommandWithNMovies("mvo")
 
 def printTopNMoviesFromX():
 
-	command = "tmxc$$" + input("Enter the country name: ") + "$$"
+	command = "tmxc" + delim + input("Enter the country name: ") + delim
 	command += input("Enter the number of movies: ")
-	printResponse(sendRequest(command))
+	return printResponse(sendRequest(command))
 
 def printNLowestRatedMovies():
 
-	execCommandWithNMovies("lrm")
+	return execCommandWithNMovies("lrm")
 
 def printActedBetweenYearsXAndY():
 
-	command = "awaxy$$" + input("Enter the lowerbound of the years range: ") + "$$"
+	command = "awaxy" + delim + input("Enter the lowerbound of the years range: ") + delim
 	command += input("Enter the upperbound of the years range: ")
-	printResponse(sendRequest(command))
+	return printResponse(sendRequest(command))
 
 def printMoviesByActor():
 
-	command = "mba$$" + input("Enter the actor's full name: ")
-	printResponse(sendRequest(command))
+	command = "mba" + delim + input("Enter the actor's full name: ")
+	return printResponse(sendRequest(command))
 
 def printMoviesByDirector():
 
-	command = "mdd$$" + input("Enter the director's full name: ")
-	printResponse(sendRequest(command))
+	command = "mdd" + delim + input("Enter the director's full name: ")
+	return printResponse(sendRequest(command))
 
 def printTopNMoviesOfYear():
 
-	command = "tmy$$" + input("Enter the year: ")
-	execCommandWithNMovies(command)
+	command = "tmy" + delim + input("Enter the year: ")
+	return execCommandWithNMovies(command)
 
 def printActedInMoviesXAndY():
 
-	command = "abmxy$$" + input("Enter the name of the first movie: ") + "$$"
+	command = "abmxy" + delim + input("Enter the name of the first movie: ") + delim
 	command += input("Enter the name of the second movie: ")
-	printResponse(sendRequest(command))
+	return printResponse(sendRequest(command))
 
 def main():
 	print("Hello, welcome to our movies database manager! Please enter a command")
@@ -195,6 +227,7 @@ def main():
 		if command == "help" or command == "h":
 			printChoices(commandsList)
 		elif command == "e" or command == "exit":
+			print("Thank you for using this application!")
 			break
 		elif command == "am":
 			responses.append(addMovie())
