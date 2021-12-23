@@ -1,7 +1,6 @@
 import mysql.connector
 from mysql.connector import errorcode
 import datetime
-import random
 import re
 
 from mysql.connector.connection import MySQLConnection
@@ -121,15 +120,28 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
     return response
 
 def getMovieId(movieName, cnx: MySQLConnection):
-    query = select("imdb_title_id", "Movies", "title = '" + str(movieName) + "'", None, None)
+    query = select(["imdb_title_id"], "Movies", "title = '" + str(movieName) + "'", None, None)
     response = getQueryResponse(cnx, query, ["imdb_title_id"], None)
     if "imdb_title_id" in response:
         return response["imdb_title_id"]
 
+def getLastIndex(cnx: MySQLConnection):
+    query = select(
+        ["imdb_title_id"],
+        "Movies",
+        None,
+        "Movies.imdb_title_id DESC",
+        "1"
+    )
+    expectedHeadings = ["imdb_title_id"]
+    response = getQueryResponse(cnx, query, expectedHeadings, None)
+    return int(response["imdb_title_id"][0].replace("tt", ""))
+    
+
 def addMovieToMovies(parts, cnx: MySQLConnection):
     queryParams = []
     # fix title id add one from last entry
-    queryParams.append("tt" + str(random.randint(9915000, 9999999))) #id
+    queryParams.append("tt" + str(getLastIndex(cnx) + 1)) #id
     queryParams.append(str(parts[1])) # title
     queryParams.append(str(parts[1])) # original title
     # queryParams.append(parts[2]) # year
