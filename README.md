@@ -24,6 +24,8 @@ You may need to install re:
 
 `$ make client`: Starts running the client
 
+`$ make test`: Runs the test suite for the client and the server
+
 `$ make testClient`: Runs the test suite for the client
 
 `$ make testServer`: Runs the test suite for the server
