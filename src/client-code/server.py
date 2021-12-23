@@ -5,7 +5,6 @@ import random
 import re
 
 from mysql.connector.connection import MySQLConnection
-from mysql.connector.pooling import MYSQL_CNX_CLASS
 
 Err = {
     "accdenied": "ERR: Access denied to the database, please try again!",
