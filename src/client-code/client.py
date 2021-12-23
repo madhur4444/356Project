@@ -70,9 +70,12 @@ def printResponse(response: dict):
 	
 	return response
 
-def getInput(prompt, isRequired):
+def getInput(prompt, isRequired, useDelim = True):
 
-	inp = delim
+	if useDelim:
+		inp = delim
+	else:
+		inp = ""
 	if isRequired:
 		while True:
 			temp = input(prompt)
@@ -122,7 +125,7 @@ def updateMovie():
 
 	printChoices(["Name", "Date published", "Duration", "Country", "Language", "Director", "Writer", "Production company", "Actors", "Description", "Budget", "USA Gross Income", "Worldwide Gross Income", "Number of user reviews", "Number of critic reviews"])
 	fieldsIdx = int(input()) - 1
-	newVal = getInput("Enter the new data ", True)
+	newVal = getInput("Enter the new data ", True, False)
 	for field in moviesLayman2Fields[fieldsIdx]:
 		command += delim
 		command += str(field) + "?=" + str(newVal)
