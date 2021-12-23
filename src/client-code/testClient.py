@@ -29,7 +29,7 @@ def main():
             "Title": ["Spider-Man: No Way Home"],
             "Original Title": ["Spider-Man: No Way Home"],
             "Year": ["2021"],
-            "Date Published": ["2021-12-16"],
+            "Date Published": ["2021-12-16 00:00:00"],
             "Duration": ["146"],
             "Country": ["USA, India, Canada"],
             "Language": ["English"],
