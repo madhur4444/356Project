@@ -1,9 +1,12 @@
 import server
 
+# Delimiter for the request
 delim = "$$"
 
+# Suffix to add in user prompt if the field can be left empty
 emptySuffix = "(leave empty and press enter if applicable): "
 
+# Helper list to map the user input to fields in the Movies table
 moviesLayman2Fields = [
 	["title", "original_title"],
 	["year_of_release", "date_published"],
@@ -44,6 +47,7 @@ commandsList = [
 	"e - Exit"
 ]
 
+# Calls parseRequest of the server with the input request
 def sendRequest(request):
 	print("Sending request!" + request)
 	return server.parseRequest(request)
@@ -52,6 +56,7 @@ def printChoices(choices):
 	for i in range(len(choices)):
 		print(str(i + 1) + ". " + str(choices[i]))
 
+# Prints the response it receives as input and also returns it
 def printResponse(response: dict):
 
 	print("Here is your response!")
@@ -70,6 +75,10 @@ def printResponse(response: dict):
 	
 	return response
 
+# Function used to get user input.
+# This validates the input for security.
+# It will be refactored in the future for additional security
+# however that is not possible right now due to time contraints.
 def getInput(prompt, isRequired, useDelim = True):
 
 	if useDelim:
@@ -137,6 +146,7 @@ def updateMovie():
 
 	return response
 
+# Helper function: It sends a request with an initial command + a parameter of N movies
 def execCommandWithNMovies(initialCommand):
 
 	command = initialCommand + getInput("Enter the number of movies: ", True)
@@ -147,6 +157,13 @@ def getMovieDetails():
 	command = "gmd" + getInput("Enter the movie name: ", True)
 	return printResponse(sendRequest(command))
 
+# While this is a one-line function, it is kept this way for various reasons:
+# 1. Readability of user: When user reads the main() function, it is much more
+# 	 descriptive to read printTopNMovies() than execCommandWithNMovies() when
+# 	 every other command is more readable.
+# 2. Scalability: In the future, if the editor of this document
+# 	 wants to improve on this and add optional/mandatory arguments from the user,
+# 	 it is much easier to do it inside this wrapper function, instead of polluting the main() function.
 def printTopNMovies():
 
 	return execCommandWithNMovies("tm")
@@ -209,11 +226,13 @@ def printActedInMoviesXAndY():
 	command += getInput("Enter the name of the second movie: ", True)
 	return printResponse(sendRequest(command))
 
+# First function for code execution
 def main():
 	print("Hello, welcome to our movies database manager! Please enter a command")
 	printChoices(commandsList)
 	responses = []    # List of responses for testing purposes
 
+	# Program only exits when user types e or exit
 	while True:
 		command = input()
 		
@@ -263,15 +282,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
-'''
-Video:
-
-What to explain:
-1. ER Diagram
-2. Sanitizing and Loading data
-3. Code (normal + test suite)
-
-Harshit: ER Diagram + sanitizing/loading
-Kartikeya: Code + outro
-'''
