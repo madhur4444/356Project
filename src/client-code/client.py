@@ -206,13 +206,13 @@ def printMoviesByDirector():
 
 def printTopNMoviesOfYear():
 
-	command = "tmy" + delim + input("Enter the year: ")
+	command = "tmy" + getInput("Enter the year: ", True)
 	return execCommandWithNMovies(command)
 
 def printActedInMoviesXAndY():
 
-	command = "abmxy" + delim + input("Enter the name of the first movie: ") + delim
-	command += input("Enter the name of the second movie: ")
+	command = "abmxy" + getInput("Enter the name of the first movie: ", True)
+	command += getInput("Enter the name of the second movie: ", True)
 	return printResponse(sendRequest(command))
 
 def main():
