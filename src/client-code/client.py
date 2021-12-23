@@ -138,6 +138,11 @@ def execCommandWithNMovies(initialCommand):
 	command = initialCommand + getInput("Enter the number of movies: ", True)
 	return printResponse(sendRequest(command))
 
+def getMovieDetails():
+
+	command = "gmd" + getInput("Enter the movie name: ", True)
+	return printResponse(sendRequest(command))
+
 def printTopNMovies():
 
 	return execCommandWithNMovies("tm")
@@ -218,6 +223,8 @@ def main():
 			responses.append(deleteMovie())
 		elif command == "um":
 			responses.append(updateMovie())
+		elif command == "gmd":
+			responses.append(getMovieDetails())
 		elif command == "tm":
 			responses.append(printTopNMovies())
 		elif command == "actm":

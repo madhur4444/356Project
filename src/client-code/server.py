@@ -1,7 +1,6 @@
 import mysql.connector
 from mysql.connector import errorcode
 import datetime
-import random
 import re
 
 from mysql.connector.connection import MySQLConnection
@@ -121,15 +120,28 @@ def getQueryResponse(conn: MySQLConnection, query, headings, queryParams):
     return response
 
 def getMovieId(movieName, cnx: MySQLConnection):
-    query = select("imdb_title_id", "Movies", "title = '" + str(movieName) + "'", None, None)
+    query = select(["imdb_title_id"], "Movies", "title = '" + str(movieName) + "'", None, None)
     response = getQueryResponse(cnx, query, ["imdb_title_id"], None)
     if "imdb_title_id" in response:
         return response["imdb_title_id"]
 
+def getLastIndex(cnx: MySQLConnection):
+    query = select(
+        ["imdb_title_id"],
+        "Movies",
+        None,
+        "Movies.imdb_title_id DESC",
+        "1"
+    )
+    expectedHeadings = ["imdb_title_id"]
+    response = getQueryResponse(cnx, query, expectedHeadings, None)
+    return int(response["imdb_title_id"][0].replace("tt", ""))
+    
+
 def addMovieToMovies(parts, cnx: MySQLConnection):
     queryParams = []
     # fix title id add one from last entry
-    queryParams.append("tt" + str(random.randint(9915000, 9999999))) #id
+    queryParams.append("tt" + str(getLastIndex(cnx) + 1)) #id
     queryParams.append(str(parts[1])) # title
     queryParams.append(str(parts[1])) # original title
     # queryParams.append(parts[2]) # year
@@ -201,6 +213,63 @@ def updateMovieData(parts, cnx: MySQLConnection):
     query = update("Movies", fields, newValues, "imdb_title_id = '" + str(movieId) + "'")
     response = getQueryResponse(cnx, query, [], None)
     return 'nodata' in response
+
+def getMovieDetails(parts, cnx: MySQLConnection):
+
+    # First, get the movie name
+    movieName = str(parts[1])
+
+    # Now, build query
+    query = select([
+            "title AS Title",
+            "original_title AS Original Title",
+            "year AS Year",
+            "date_published AS Date Published",
+            "genre AS Genre",
+            "duration AS Duration",
+            "country AS Country",
+            "language AS Language",
+            "director AS Director(s)",
+            "writer AS Writer(s)",
+            "production_company AS Production Company",
+            "actors AS Actor(s)",
+            "description AS Description",
+            "avg_vote AS Average Vote/Rating",
+            "votes AS Number of Votes/Ratings",
+            "budget AS Budget",
+            "usa_gross_income AS USA Gross Income",
+            "worlwide_gross_income AS Worldwide Gross Income",
+            "metascore AS Metascore",
+            "reviews_from_users AS Number of User Reviews",
+            "reviews_from_critics AS Number of Critic Reviews"
+        ],
+        "Movies",
+        "title = '" + str(movieName) + "'"
+    )
+    expectedHeadings = [
+        "Title",
+        "Original Title",
+        "Year",
+        "Date Published",
+        "Genre",
+        "Duration",
+        "Country",
+        "Language",
+        "Director(s)",
+        "Writer(s)",
+        "Production Company",
+        "Actor(s)",
+        "Description",
+        "Average Vote/Rating",
+        "Number of Votes/Ratings",
+        "Budget",
+        "USA Gross Income",
+        "Worldwide Gross Income",
+        "Metascore",
+        "Number of User Reviews",
+        "Number of Critic Reviews"
+    ]
+    return getQueryResponse(cnx, query, expectedHeadings, None)
 
 def getTopNMovies(parts, cnx: MySQLConnection):
 
@@ -455,6 +524,8 @@ def parseRequest(request):
         response = deleteMovieFromAllTables(parts, cnx)
     elif parts[0] == "um":
         response = updateMovieData(parts, cnx)
+    elif parts[0] == "gmd":
+        response = getMovieDetails(parts, cnx)
     elif parts[0] == "tm":
         response = getTopNMovies(parts, cnx)
     elif parts[0] == "actm":
