@@ -162,7 +162,8 @@ def printTopNMoviesByGenre():
 
 def printActorsBornToday():
 
-	return printResponse(sendRequest("abt"))
+	command = "abt" + getInput("Enter a different month day (mm-dd) if you like otherwise we will use today's date", False)
+	return printResponse(sendRequest(command))
 
 def printNMostVotedMoviesUS():
 
